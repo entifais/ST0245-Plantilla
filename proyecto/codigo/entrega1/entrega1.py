@@ -7,13 +7,16 @@ try:
     import pydeck as pdk
 except:
     print("please install pydeck\npip install pydeck")
+
+
+SOURCEURL="https://raw.githubusercontent.com/mauriciotoro/ST0245-Eafit/master/proyecto/Datasets/calles_de_medellin_con_acoso.csv"
+
 try:
     FILE="calles_de_medellin_con_acoso.csv"
-    data=pd.read_csv(FILE, on_bad_lines='skip')
+    data=pd.read_csv(FILE, on_bad_lines='skip',sep=";")
 except:
-    SOURCEURL="https://raw.githubusercontent.com/mauriciotoro/ST0245-Eafit/master/proyecto/Datasets/calles_de_medellin_con_acoso.csv"
-    data=pd.read_csv(SOURCEURL, on_bad_lines='skip')
-    print(data.to_string())
+    data=pd.read_csv(SOURCEURL, on_bad_lines='skip',sep=";")
+print(data.to_string())
 
 view = pdk.ViewState(latitude=6.256405968932449, longitude= -75.59835591123756, pitch=50, zoom=9)
 layer = pdk.Layer(
@@ -26,6 +29,5 @@ layer = pdk.Layer(
     get_path="path",
     get_width=5,
 )
-
 r = pdk.Deck(layers=[layer], initial_view_state=view)
-r.to_html('mapa_inutil.html')
+r.to_html('mapa_inutil_y_vende_humo.html')
