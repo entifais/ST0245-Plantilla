@@ -4,5 +4,9 @@
   presentacion con nombres del equipo y del proyecto
 
   4 alternativas solucion y 4 trabajos relacionados
-  
+
+* referencias
+  usar network x con panadas
+  #https://towardsdatascience.com/from-dataframe-to-network-graph-bbb35c8ab675
+
   
