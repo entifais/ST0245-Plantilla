@@ -16,7 +16,7 @@ try:
     data=pd.read_csv(FILE, on_bad_lines='skip',sep=";")
 except:
     data=pd.read_csv(SOURCEURL, on_bad_lines='skip',sep=";")
-print(data.to_string())
+print(data)
 
 view = pdk.ViewState(latitude=6.256405968932449, longitude= -75.59835591123756, pitch=50, zoom=9)
 layer = pdk.Layer(
