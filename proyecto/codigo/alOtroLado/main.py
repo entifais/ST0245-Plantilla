@@ -16,6 +16,7 @@ GENMAPFILE=TEMPLATEDIR+MAPNAME
 DATASOURCE="https://raw.githubusercontent.com/entifais/ST0245-Plantilla/master/proyecto/codigo/alOtroLado/data/calles_de_medellin_con_acoso.csv"
 DATACSVFILE="data/calles_de_medellin_con_acoso.csv"
 DATAJSON="data/medellin_map.json"
+
 app = Flask(__name__)
 
 class webpage():
@@ -35,8 +36,7 @@ class configData:
         if file[-4:]==".csv":
             self.data = pd.read_csv(file,sep=";")
         if file[-5:]==".json":
-            self.data = pd.read_json(file,sep)
-
+            self.data = pd.read_json(file)
 
     def downloadCsv(self):
         self.data.to_csv(index=False)
@@ -45,7 +45,6 @@ class configData:
 
     def getData(self):
         return self.data
-
 
     def clearDataJson(name="out.json"):
         dataclear = ""
