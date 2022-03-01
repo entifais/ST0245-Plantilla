@@ -8,5 +8,17 @@
 * referencias
   usar network x con panadas
   #https://towardsdatascience.com/from-dataframe-to-network-graph-bbb35c8ab675
+  #https://networkx.guide/algorithms/shortest-path
 
-  
+* Todos 
+  inicialisation
+  prety interface
+  implementate algoritms
+  use private atributes
+
+* now
+  download data
+  map
+  server
+  data conversion
+  multilayer
