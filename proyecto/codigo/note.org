@@ -15,7 +15,7 @@
   prety interface
   implementate algoritms
   use private atributes
-
+  graph dots for test nodes
 * now
   download data
   map
