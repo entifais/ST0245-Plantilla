@@ -11,49 +11,58 @@ tarjet=""
 
 for i in range(len(data)):
     node=data["node"][i]
-    weight=(data["length"][i])#+data["harassmentRisk"][i])
+    weight=1-data["harassmentRisk"][i]
+    #weight=(data["length"][i]+data["harassmentRisk"][i]/100)
     Grafo.add_edge(str(data["path"][i][0]),str(data["path"][i][1]),weight=weight)
     Grafo.add_node(str(node))
-    if i==4:
-        source=node
-    if i==len(data)-1:
-        tarjet=node
-print(data["path"].head(2))
-#print(nx.to_edgelist(Grafo))
 
-djNodes=nx.dijkstra_path(Grafo, "[-75.5728593, 6.2115169]", "[-75.5705202, 6.2106275]", weight='weight')
+#print(data.to_string())
+
+#dijkstra funciona mal con wegiths pero no da error,dijkstra sin weigths funciona raro
+#funcionando
+#nodes=nx.dijkstra_path(Grafo, "[-75.6909483, 6.338773]", "[-75.5572602, 6.2612576]", weight=None)
+#nodes=nx.shortest_path(Grafo, "[-75.6909483, 6.338773]", "[-75.5705202, 6.2106275]", weight='weight', method='dijkstra')
+#nodes=nx.shortest_path(Grafo, "[-75.6909483, 6.338773]", "[-75.5705202, 6.2106275]", weight=None, method='dijkstra')
+#nodes=nx.shortest_path(Grafo, "[-75.6909483, 6.338773]", "[-75.5705202, 6.2106275]", weight=None, method='bellman-ford')
+nodes=nx.shortest_path(Grafo, "[-75.6909483, 6.338773]", "[-75.5705202, 6.2106275]", weight='weight', method='bellman-ford')
+
+
+#no funciona
+#nodes=nx.dijkstra_path(Grafo, "[-75.6909483, 6.338773]", "[-75.5705202, 6.2106275]", weight='weight')
+
+#no es lo mejor
+#nodes=nx.astar_path(Grafo, "[-75.6909483, 6.338773]", "[-75.5714665, 6.2450747]", weight=None)
+
+
+#nodes=nx.floyd_warshall(Grafo)
+#nodes=nx.bellman_ford_path(Grafo, "[-75.6909483, 6.338773]", "[-75.5705202, 6.2106275]", weight='weight')
+
+#nodes=djNodes
+"""
 djPath=[]
 
-tmp=list(Grafo.edges(djNodes,data=True))
+tmp=list(Grafo.edges(odes,data=True))
 for i in range(len(tmp)):
     djPath.append([tmp[i][0],tmp[i][1]])
-
+"""
 
 #print(tmp[i][0]+tmp[i][1])
 #print(djNodes,djPath,len(djNodes),len(djPath))
 #print(djPath,len(djNodes),len(djPath))
 #,source,tarjet)
-#pa=nx.bellman_ford_path_length(Grafo,source,tarjet)
 
 path=[]
-for i in djNodes:
+for i in nodes:
     path.append(eval(i))
-print(djNodes)
+#print(djNodes)
 #pathdj=pd.DataFrame({"path":path})
 #print(data.head(5))
 print(data)
-"""
-[
-  {
-    "name": "Richmond - Millbrae",
-    "path": path
-    }
-]
-"""
+
 pathdj=pd.DataFrame([{"name":"path","path":path}])
 print(pathdj)
-view = pdk.ViewState(latitude=6.256405968932449, longitude= -75.59835591123756, pitch=20, zoom=9)
-layer3 = pdk.Layer(
+view = pdk.ViewState(latitude=6.256405968932449, longitude= -75.59835591123756, pitch=20, zoom=15)
+layer4 = pdk.Layer(
     type="PathLayer",
     data=pathdj,
     pickable=False,
@@ -63,15 +72,25 @@ layer3 = pdk.Layer(
     get_path="path",
     get_width=5,
 )
+
+layer3=pdk.Layer(
+    "TextLayer",
+    data=data,
+    get_position="node",
+    get_size=16,
+    get_color=[205, 205, 205],
+    get_text="name",
+    get_angle=0
+)
 layer2 = pdk.Layer(
     "ScatterplotLayer",
-    data=pathdj,
+    data=data,
     pickable=True,
     opacity=0.8,
     stroked=True,
     filled=True,
-    radius_scale=6,
-    radius_min_pixels=1,
+    radius_scale=3,
+    radius_min_pixels=4,
     radius_max_pixels=100,
     line_width_min_pixels=1,
     get_position="node",
@@ -90,5 +109,5 @@ layer1 = pdk.Layer(
     get_path="path",
     get_width=1,
 )
-r = pdk.Deck(layers=[layer3,layer2,layer1], initial_view_state=view)
+r = pdk.Deck(layers=[layer1,layer2,layer4], initial_view_state=view)
 r.to_html('tmp.html')
