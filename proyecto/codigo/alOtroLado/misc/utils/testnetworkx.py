@@ -20,13 +20,16 @@ for i in range(len(data)):
 
 #dijkstra funciona mal con wegiths pero no da error,dijkstra sin weigths funciona raro
 #funcionando
-#nodes=nx.dijkstra_path(Grafo, "[-75.6909483, 6.338773]", "[-75.5572602, 6.2612576]", weight=None)
+o="Calle 10"
+print(data.set_index(["name"]).loc[o])
+d=""
+nodes=nx.dijkstra_path(Grafo, "[-75.6909483, 6.338773]", "[-75.5572602, 6.2612576]", weight=None)
 #nodes=nx.shortest_path(Grafo, "[-75.6909483, 6.338773]", "[-75.5705202, 6.2106275]", weight='weight', method='dijkstra')
 #nodes=nx.shortest_path(Grafo, "[-75.6909483, 6.338773]", "[-75.5705202, 6.2106275]", weight=None, method='dijkstra')
 #nodes=nx.shortest_path(Grafo, "[-75.6909483, 6.338773]", "[-75.5705202, 6.2106275]", weight=None, method='bellman-ford')
-nodes=nx.shortest_path(Grafo, "[-75.6909483, 6.338773]", "[-75.5705202, 6.2106275]", weight='weight', method='bellman-ford')
+#nodes=nx.shortest_path(Grafo, "[-75.6909483, 6.338773]", "[-75.5705202, 6.2106275]", weight='weight', method='bellman-ford')
 
-
+exit()
 #no funciona
 #nodes=nx.dijkstra_path(Grafo, "[-75.6909483, 6.338773]", "[-75.5705202, 6.2106275]", weight='weight')
 
@@ -72,7 +75,7 @@ layer4 = pdk.Layer(
     get_path="path",
     get_width=5,
 )
-
+#https://deckgl.readthedocs.io/en/latest/event_handling.html
 layer3=pdk.Layer(
     "TextLayer",
     data=data,
@@ -84,7 +87,7 @@ layer3=pdk.Layer(
 )
 layer2 = pdk.Layer(
     "ScatterplotLayer",
-    data=data,
+    data=data["node"],
     pickable=True,
     opacity=0.8,
     stroked=True,
@@ -102,7 +105,7 @@ layer2 = pdk.Layer(
 layer1 = pdk.Layer(
     type="PathLayer",
     data=data,
-    pickable=True,
+    pickable=False,
     get_color=(0,155,0),
     width_scale=2,
     width_min_pixels=1,

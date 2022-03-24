@@ -4,27 +4,70 @@
 alOtrolado - 2022 - por jero98772
 alOtrolado - 2022 - by jero98772
 """
-from flask import Flask, render_template, request, flash, redirect ,session
+from flask import Flask, render_template, request, flash, redirect,json
 import pandas as pd
 import pydeck as pdk
 import networkx as nx
+import json
+import datetime
+from collections import deque
+from io import StringIO  
 
-from core.tools import writetxt
+from core.tools.tools import writetxt,readtxt
 
 TEMPLATEDIR="templates/"
-MAPNAME="tmp.html"
-GENMAPFILE=TEMPLATEDIR+MAPNAME
+#MAPNAME="tmp.html"
+#GENMAPFILE=TEMPLATEDIR+MAPNAME
 
 DATACSVFILE="https://raw.githubusercontent.com/entifais/ST0245-Plantilla/master/proyecto/codigo/alOtroLado/data/calles_de_medellin_con_acoso.csv"
 DATACSVFILE="data/calles_de_medellin_con_acoso.csv"
-DATAJSON="data/graph_medellin_all_data.json"
+DATAJSON="core/data/graph_medellin_all_data.json"
 
 app = Flask(__name__)
 
 class webpage():
-    @app.route("/")
-    def index():
+    @app.route("/",methods=["GET","POST"])
+    def index(): 
+        if request.method=="POST":
+            source=request.form["source"].split(",")
+            target=request.form["target"].split(",")
+            data=configData(DATAJSON).getData()
+            maps=configMap(data)
+            newPath=pathsX(data,"[-75.6909483, 6.338773]", "[-75.5572602, 6.2612576]")
+            #nodes=pathsX(data,str(source),str(target)).dijkstra() nodes.getData()
+            newPath.dijkstra()
+            nodesData=newPath.getData()
+            
+            #print(nodesData,str(source),str(target))
+            salt=str(datetime.datetime.now()).replace(" ","").replace("-","").replace(":","")
+            #maps.genMapMultlayer(GENMAPFILE,[maps.getPathMap(),maps.getnodesMap(),configMap.newPath(nodes.getData())])
+            fileName="map"+str(salt)+".html"
+            #writetxt(fileName,"")
+            configMap.newPath(nodesData)
+            layers=[maps.getPathMap(),maps.getnodesMap(),configMap.newPath(nodesData)]
+            maps.genMapMultlayer(fileName,layers)
+            #redirect 
         return render_template("index.html")
+    @app.route("/config")
+    def config():
+        #play with algoritm
+        #data=configData(DATAJSON).getData()
+        #data=configData(DATACSVFILE)
+        #configData.clearAllDataJson(data.getData())
+        return render_template("config.html")
+    @app.route("/about")
+    def about():
+        return render_template("about.html")
+    @app.route("/<string:id>")
+    def genMap(id):
+        return render_template("index.html")
+    @app.route('/data.json')
+    def webData():
+        data=json.dumps(readtxt(DATAJSON))
+        response = app.response_class(response=data,mimetype='application/json')
+        return response
+
+    #temporal web pages
     @app.route("/tmp")
     def indextmp():
         return render_template("tmp.html")
@@ -34,12 +77,10 @@ class webpage():
     @app.route("/map")
     def webMap():
         return render_template(MAPNAME)
-    @app.route("/")
-    def config():
-        return render_template("config.html")
 
 class configData:
     def __init__(self,file,sep=";"):
+        self._data=""
         if file[-4:]==".csv":
             self._data = pd.read_csv(file,sep=";")
         if file[-5:]==".json":
@@ -75,19 +116,40 @@ class configData:
             except:
                 dataclear+='{"name":"'+str(i)+'","path": ['+"["+origin[0]+","+origin[1]+"]"+",["+destination[0]+","+destination[1]+']],"node":['+origin[0]+","+origin[1]+'],"harassmentRisk":0,"length":'+str(data["length"][i])+'},'
         writetxt(name,"["+dataclear[:-1]+"]")
+    def createNodes(data,name="out.json"):
+    
 
 class graphX():
     def __init__(self,data):
-        Grafo = nx.Graph()
+        self.graph=nx.Graph()
         for i in range(len(data)):
             node=data["node"][i]
             weight=(data["length"][i])
-            Grafo.add_edge(str(data["path"][i][0]),str(data["path"][i][1]),weight=weight)
-            Grafo.add_node(str(node))
+            self.graph.add_edge(str(data["path"][i][0]),str(data["path"][i][1]),weight=weight)
+            self.graph.add_node(str(node))
 
+
+class pathsX(graphX):
+    def __init__(self,data,source,target):
+        graphX.__init__(self,data)
+        self._source=source
+        self._target=target
     def dijkstra(self):
-        djNodes=nx.dijkstra_path(Grafo, "[-75.6909483, 6.338773]", "[-75.5705202, 6.2106275]", weight='weight')
-        pathdj=pd.DataFrame([{"name":"path","path":path}])
+        self._nodes=nx.dijkstra_path(self.graph, self._source, self._target, weight='weight')
+        #return path2df(self._nodes)
+    def bellmanford(self):
+        self._nodes=nx.shortest_path(self.graph, self._source, self._target, weight='weight', method='bellman-ford')
+        #return path2df(self._nodes)
+    def getData(self):
+        path=deque()
+        for i in self._nodes:
+            path.append(eval(i))
+        pathdf=pd.DataFrame([{"name":"path","path":path}])
+        return pathdf
+#self._nodes=nx.dijkstra_path(Grafo, "[-75.6909483, 6.338773]", "[-75.5572602, 6.2612576]", weight=None)
+#self._nodes=nx.shortest_path(Grafo, "[-75.6909483, 6.338773]", "[-75.5705202, 6.2106275]", weight=None, method='bellman-ford')
+#nodes=nx.shortest_path(Grafo, "[-75.6909483, 6.338773]", "[-75.5705202, 6.2106275]", weight='weight', method='dijkstra')
+#nodes=nx.shortest_path(Grafo, "[-75.6909483, 6.338773]", "[-75.5705202, 6.2106275]", weight=None, method='dijkstra')
 
 class configMap:
     def __init__(self,data):
@@ -130,7 +192,7 @@ class configMap:
             get_fill_color=[137, 36, 250],
             get_line_color=[0, 0, 0],
         )
-    def newPath(self,data,tag="path",color=(0,15,205)):
+    def newPath(data,tag="path",color=(0,15,205)):
         newPath = pdk.Layer(
             type="PathLayer",
             data=data,
@@ -143,24 +205,13 @@ class configMap:
         )
         return newPath
     def genMapMultlayer(self,fileName,layers:list):
+        print("map"*50)
         view = pdk.ViewState(latitude=6.256405968932449, longitude= -75.59835591123756, pitch=40, zoom=12)
         mapCompleate = pdk.Deck(layers=layers, initial_view_state=view)
-        try:
-            mapCompleate.to_html(fileName)
-        except:
-            writetxt(GENMAPFILE,"")
-            mapCompleate.to_html(fileName)
+        mapCompleate.to_html(fileName)
     
     def getEmptyMap(self):return self.emptyMap
     def getPathMap(self):return self.pathMap
     def getnodesMap(self):return self.nodesMap
 
-if __name__=='__main__':
-    data=configData(DATAJSON).getData()
-    #data=configData(DATACSVFILE)
-    #configData.clearAllDataJson(data.getData())
 
-    maps=configMap(data)
-    maps.genMapMultlayer(GENMAPFILE,[maps.getPathMap(),maps.getnodesMap()])
-    #graphNetworX(data)
-    app.run(debug=True,host="0.0.0.0",port=9600)
