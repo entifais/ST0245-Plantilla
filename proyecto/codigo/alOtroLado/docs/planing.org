@@ -1,0 +1,21 @@
+* code planing
+  
+* web server
+  
+** index
+   
+** new path map
+   
+** about web page
+   
+** json dir
+   
+** configuration play(optional)
+  
+* docs
+  
+** readme
+   
+** logo
+   
+** video

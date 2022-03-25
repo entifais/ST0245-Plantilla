@@ -1,11 +1,14 @@
 import time
 from collections import deque
 from io import StringIO  
+
 strnomal=""
 lstnomal=[]
 lstnomal2=[]
-strio=StringIO
-nums=10000
+strio=StringIO()
+dq=deque()
+
+nums=600000000
 def bech1(nums,d):
 	start=time.time()
 	for i in range(nums):
@@ -21,21 +24,26 @@ def bech2(nums,d):
 def bech3(nums,d):
 	start=time.time()
 	for i in range(nums):
-		d.append(i)
+		d.append(str(i))
 	end=time.time()
 	print(end-start)
 def bech4(nums,d):
 	start=time.time()
 	for i in range(nums):
-		d.insert(i)
+		d.insert(str(i))
 	end=time.time()
 	print(end-start)
 def bech5(nums,d):
 	start=time.time()
 	for i in range(nums):
-		d.append(i)
+		d.append(str(i))
 	end=time.time()
 	print(end-start)
-def main()
-	bech1()
-	bech2()
+def main():
+	#bech1(nums,strnomal)
+	#bech2(nums,strio)
+	bech3(nums,lstnomal)
+	#bech4(nums,lstnomal2)
+	bech5(nums,dq)
+
+main()
