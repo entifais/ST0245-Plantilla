@@ -19,4 +19,15 @@ def writetxt(name,content):
   with open(name, 'w') as file:
     file.write(content)
     file.close()
-writetxt("out.json","["+dataclear[:-1]+"]")
+#writetxt("out.json","["+dataclear[:-1]+"]")
+def createNodes(data,name="out.json"):
+    dataclear = ""
+    for i in range(len(data)): 
+        origin = (data["origin"][i][1:-1].split(","))
+        destination = (data["destination"][i][1:-1].split(","))
+        try:
+            dataclear+='{"name":"'+data["name"][i]+'","node":['+origin[0]+","+origin[1]+']},'
+        except:
+            dataclear+='{"name":"'+str(i)+'","node":['+origin[0]+","+origin[1]+']},'
+    writetxt(name,"["+dataclear[:-1]+"]")
+createNodes(data,"nodes_data.json")

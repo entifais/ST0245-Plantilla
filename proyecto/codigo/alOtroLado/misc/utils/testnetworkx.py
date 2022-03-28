@@ -29,7 +29,6 @@ nodes=nx.dijkstra_path(Grafo, "[-75.6909483, 6.338773]", "[-75.5572602, 6.261257
 #nodes=nx.shortest_path(Grafo, "[-75.6909483, 6.338773]", "[-75.5705202, 6.2106275]", weight=None, method='bellman-ford')
 #nodes=nx.shortest_path(Grafo, "[-75.6909483, 6.338773]", "[-75.5705202, 6.2106275]", weight='weight', method='bellman-ford')
 
-exit()
 #no funciona
 #nodes=nx.dijkstra_path(Grafo, "[-75.6909483, 6.338773]", "[-75.5705202, 6.2106275]", weight='weight')
 
@@ -64,7 +63,9 @@ print(data)
 
 pathdj=pd.DataFrame([{"name":"path","path":path}])
 print(pathdj)
-view = pdk.ViewState(latitude=6.256405968932449, longitude= -75.59835591123756, pitch=20, zoom=15)
+data = pd.read_json("graph_medellin_all_data.json")#.head(10000)
+
+view = pdk.ViewState(latitude=6.2564059689324, longitude= -75.5983559112375, pitch=20, zoom=15)
 layer4 = pdk.Layer(
     type="PathLayer",
     data=pathdj,
@@ -76,18 +77,30 @@ layer4 = pdk.Layer(
     get_width=5,
 )
 #https://deckgl.readthedocs.io/en/latest/event_handling.html
-layer3=pdk.Layer(
+layer3 =pdk.Layer(
     "TextLayer",
     data=data,
     get_position="node",
     get_size=16,
-    get_color=[205, 205, 205],
-    get_text="name",
+    get_color=[255, 255, 255],
+    get_text="node",
     get_angle=0
 )
+layer = pdk.Layer(
+    "TextLayer",
+    data,
+    pickable=True,
+    get_position="node",
+    get_text="node",
+    get_size=16,
+    get_color=[0, 0, 0],
+    get_angle=0,
+
+)
+
 layer2 = pdk.Layer(
     "ScatterplotLayer",
-    data=data["node"],
+    data=data,
     pickable=True,
     opacity=0.8,
     stroked=True,
@@ -112,5 +125,5 @@ layer1 = pdk.Layer(
     get_path="path",
     get_width=1,
 )
-r = pdk.Deck(layers=[layer1,layer2,layer4], initial_view_state=view)
+r = pdk.Deck(layers=[layer2,layer3], initial_view_state=view)
 r.to_html('tmp.html')
