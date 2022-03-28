@@ -50,6 +50,8 @@ class webpage():
         return render_template("index.html")
     @app.route("/config")
     def config():
+        data=configData(DATAJSON).getData()
+        data.createNodes(data)
         #play with algoritm
         #data=configData(DATAJSON).getData()
         #data=configData(DATACSVFILE)
@@ -116,9 +118,18 @@ class configData:
             except:
                 dataclear+='{"name":"'+str(i)+'","path": ['+"["+origin[0]+","+origin[1]+"]"+",["+destination[0]+","+destination[1]+']],"node":['+origin[0]+","+origin[1]+'],"harassmentRisk":0,"length":'+str(data["length"][i])+'},'
         writetxt(name,"["+dataclear[:-1]+"]")
-    def createNodes(data,name="out.json"):
-    
 
+    def createNodes(self,data,name="out.json"):
+        data=self.data
+        dataclear = ""
+        for i in range(len(data)): 
+            origin = (data["origin"][i][1:-1].split(","))
+            destination = (data["destination"][i][1:-1].split(","))
+            try:
+                dataclear+='{"name":"'+data["name"][i]+'","node":['+origin[0]+","+origin[1]+']},'
+            except:
+                dataclear+='{"name":"'+str(i)+'","node":['+origin[0]+","+origin[1]+']},'
+        writetxt(name,"["+dataclear[:-1]+"]")
 class graphX():
     def __init__(self,data):
         self.graph=nx.Graph()
