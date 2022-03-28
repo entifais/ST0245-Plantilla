@@ -63,7 +63,7 @@ print(data)
 
 pathdj=pd.DataFrame([{"name":"path","path":path}])
 print(pathdj)
-data = pd.read_json("graph_medellin_all_data.json")#.head(10000)
+data = pd.read_json("nodes_datas.json")
 
 view = pdk.ViewState(latitude=6.2564059689324, longitude= -75.5983559112375, pitch=20, zoom=15)
 layer4 = pdk.Layer(
@@ -86,9 +86,9 @@ layer3 =pdk.Layer(
     get_text="node",
     get_angle=0
 )
-layer = pdk.Layer(
+layer5 = pdk.Layer(
     "TextLayer",
-    data,
+    data=data,
     pickable=True,
     get_position="node",
     get_text="node",

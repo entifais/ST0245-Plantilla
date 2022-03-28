@@ -48,6 +48,7 @@ class webpage():
             maps.genMapMultlayer(fileName,layers)
             #redirect 
         return render_template("index.html")
+
     @app.route("/config")
     def config():
         data=configData(DATAJSON).getData()
@@ -126,9 +127,9 @@ class configData:
             origin = (data["origin"][i][1:-1].split(","))
             destination = (data["destination"][i][1:-1].split(","))
             try:
-                dataclear+='{"name":"'+data["name"][i]+'","node":['+origin[0]+","+origin[1]+']},'
+                dataclear+='{"name":"'+data["name"][i]+'","node":['+origin[0]+','+origin[1]+']},'
             except:
-                dataclear+='{"name":"'+str(i)+'","node":['+origin[0]+","+origin[1]+']},'
+                dataclear+='{"name":"'+str(i)+'","node":['+origin[0]+','+origin[1]+']},'
         writetxt(name,"["+dataclear[:-1]+"]")
 class graphX():
     def __init__(self,data):
