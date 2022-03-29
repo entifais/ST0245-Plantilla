@@ -125,5 +125,5 @@ layer1 = pdk.Layer(
     get_path="path",
     get_width=1,
 )
-r = pdk.Deck(layers=[layer2,layer3], initial_view_state=view)
+r = pdk.Deck(layers=[], initial_view_state=view)
 r.to_html('tmp.html')

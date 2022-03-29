@@ -3,7 +3,7 @@ dataclear=""
 SOURCEURL="https://raw.githubusercontent.com/mauriciotoro/ST0245-Eafit/master/proyecto/Datasets/calles_de_medellin_con_acoso.csv"
 FILE="calles_de_medellin_con_acoso.csv"
 
-data=pd.read_csv(FILE, on_bad_lines='skip',sep=";").head(1000)
+data=pd.read_csv(FILE, on_bad_lines='skip',sep=";")
 for i in range(len(data)): 
   origin=(data["origin"][i][1:-1].split(","))
   destination=(data["destination"][i][1:-1].split(","))
@@ -26,8 +26,8 @@ def createNodes(data,name="out.json"):
         origin = (data["origin"][i][1:-1].split(","))
         destination = (data["destination"][i][1:-1].split(","))
         try:
-            dataclear+='{"name":"'+data["name"][i]+'","node":['+origin[0]+","+origin[1]+']},'
+            dataclear+='{"name":"'+data["name"][i]+'","node":['+origin[0]+","+origin[1]+'],"name2":"'+origin[0]+","+origin[1]+'"},'
         except:
-            dataclear+='{"name":"'+str(i)+'","node":['+origin[0]+","+origin[1]+']},'
+            dataclear+='{"name":"'+str(i)+'","node":['+origin[0]+","+origin[1]+'],"name2":"'+origin[0]+","+origin[1]+'"},'
     writetxt(name,"["+dataclear[:-1]+"]")
 createNodes(data,"nodes_data.json")

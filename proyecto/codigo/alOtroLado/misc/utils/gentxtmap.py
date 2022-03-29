@@ -12,17 +12,21 @@ layer3 =pdk.Layer(
     get_position="node",
     get_size=16,
     get_color=[255, 255, 255],
-    get_text="node",
+    get_text="name",
     get_angle=0
 )
 layer5 = pdk.Layer(
     "TextLayer",
     data=data,
     pickable=True,
+    stroked=False,
+    filled=True,
+    extruded=True,
+    wireframe=True,
     get_position="node",
-    get_text="node",
-    get_size=16,
-    get_color=[0, 0, 0],
+    get_text="name2",
+    get_size=6,
+    get_color=[255, 255, 255],
     get_angle=0,
 
 )
@@ -34,6 +38,8 @@ layer2 = pdk.Layer(
     opacity=0.8,
     stroked=True,
     filled=True,
+    extruded=True,
+    wireframe=True,
     radius_scale=3,
     radius_min_pixels=4,
     radius_max_pixels=100,
@@ -43,5 +49,7 @@ layer2 = pdk.Layer(
     get_fill_color=[137, 36, 250],
     get_line_color=[0, 0, 0],
 )
-r = pdk.Deck(layers=[], initial_view_state=view)
+r = pdk.Deck(layers=[layer2], initial_view_state=view)
+#r = pdk.Deck(layers=[layer2], initial_view_state=view)
+
 r.to_html('tmp.html')
