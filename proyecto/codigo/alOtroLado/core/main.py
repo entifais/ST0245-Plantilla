@@ -64,11 +64,14 @@ class webpage():
     @app.route("/<string:id>")
     def genMap(id):
         return render_template("index.html")
-    @app.route('/data.json')
+    @app.route("/data.json")
     def webData():
         data=json.dumps(readtxt(DATAJSON))
         response = app.response_class(response=data,mimetype='application/json')
         return response
+    @app.route("/dotsdir")
+    def dotsdir():
+        return render_template("dirdots.html")
 
     #temporal web pages
     @app.route("/tmp")
