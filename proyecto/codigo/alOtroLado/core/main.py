@@ -168,10 +168,12 @@ class pathsX(graphX):
         self._nodes=nx.shortest_path(self.graph, self._source, self._target, weight='weight', method='bellman-ford')
         #return path2df(self._nodes)
     def getData(self):
+        """
         path=deque()
         for i in self._nodes:
             path.append(eval(i))
-        pathdf=pd.DataFrame([{"name":"path","path":path}])
+        """
+        pathdf=pd.DataFrame([{"name":"path","path":[eval(i) for i in self._nodes]}])
         return pathdf
 #self._nodes=nx.dijkstra_path(Grafo, "[-75.6909483, 6.338773]", "[-75.5572602, 6.2612576]", weight=None)
 #self._nodes=nx.shortest_path(Grafo, "[-75.6909483, 6.338773]", "[-75.5705202, 6.2106275]", weight=None, method='bellman-ford')

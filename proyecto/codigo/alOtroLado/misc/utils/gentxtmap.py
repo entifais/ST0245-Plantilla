@@ -19,7 +19,6 @@ layer5 = pdk.Layer(
     "TextLayer",
     data=data,
     pickable=True,
-    stroked=False,
     get_position="node",
     get_text="name2",
     get_size=14,
@@ -31,7 +30,6 @@ layer5 = pdk.Layer(
 layer2 = pdk.Layer(
     "ScatterplotLayer",
     data=data,
-    pickable=True,
     radius_scale=3,
     radius_min_pixels=4,
     radius_max_pixels=100,
