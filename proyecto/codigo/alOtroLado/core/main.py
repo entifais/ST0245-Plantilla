@@ -8,16 +8,19 @@ from flask import Flask, render_template, request, flash, redirect,json
 import pandas as pd
 import pydeck as pdk
 import networkx as nx
+
+import os
 import json
 import datetime
+
 from collections import deque
-from io import StringIO  
 
 from core.tools.tools import writetxt,readtxt
 
-TEMPLATEDIR="templates/"
 #MAPNAME="tmp.html"
 #GENMAPFILE=TEMPLATEDIR+MAPNAME
+TEMPLATEDIR="templates/"
+MAPS="maps.py"
 
 DATACSVFILE="https://raw.githubusercontent.com/entifais/ST0245-Plantilla/master/proyecto/codigo/alOtroLado/data/calles_de_medellin_con_acoso.csv"
 DATACSVFILE="data/calles_de_medellin_con_acoso.csv"
@@ -25,6 +28,15 @@ DATAJSON="core/data/graph_medellin_all_data.json"
 
 app = Flask(__name__)
 
+
+if os.path.isfile(MAPS):
+    try:
+        from .maps import maps 
+        from .maps import app as appmaps 
+        joinWebpage(BLOGSFILES,appblogs,app,url=BLOGWEBDIR)
+    except:
+        updateBlog(BLOGSFILES,BLOGFILE)
+#https://github.com/jero98772/B-FeelLog/blob/main/core/main.py
 class webpage():
     @app.route("/",methods=["GET","POST"])
     def index(): 
@@ -69,9 +81,9 @@ class webpage():
         data=json.dumps(readtxt(DATAJSON))
         response = app.response_class(response=data,mimetype='application/json')
         return response
-    @app.route("/dotsdir")
+    @app.route("/dotsdir.html")
     def dotsdir():
-        return render_template("dirdots.html")
+        return render_template("dotsdir.html")
 
     #temporal web pages
     @app.route("/tmp")

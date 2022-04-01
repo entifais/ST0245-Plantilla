@@ -1,6 +1,3 @@
-from collections import deque
-import pandas as pd
-
 def writetxt(name,content):
   """
   writetxt(name,content) , write in txt file something  
@@ -18,3 +15,9 @@ def readtxt(name):
     for i in file.readlines():
       content.append(str(i).replace("\n",""))
   return content
+def joinWebpage(direccions,webApp,actualapp,url=""):  
+    for webroute in direccions:   
+      @actualapp.route(url+webroute, endpoint=webroute , methods=['GET','POST'])
+      def site():
+        return webApp
+    return site()
