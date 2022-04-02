@@ -13,9 +13,7 @@ import os
 import json
 import datetime
 
-from collections import deque
-
-from core.tools.tools import writetxt,readtxt
+from core.tools.tools import writetxt,readtxt,initMap
 
 #MAPNAME="tmp.html"
 #GENMAPFILE=TEMPLATEDIR+MAPNAME
@@ -30,36 +28,45 @@ app = Flask(__name__)
 
 
 if os.path.isfile(MAPS):
+    print("if")
     try:
         from .maps import maps 
         from .maps import app as appmaps 
         joinWebpage(BLOGSFILES,appblogs,app,url=BLOGWEBDIR)
+        print("try")
     except:
-        updateBlog(BLOGSFILES,BLOGFILE)
+        initMap(MAPS)
+        print("except")
 #https://github.com/jero98772/B-FeelLog/blob/main/core/main.py
 class webpage():
     @app.route("/",methods=["GET","POST"])
     def index(): 
         if request.method=="POST":
-            source=request.form["source"].split(",")
-            target=request.form["target"].split(",")
-            data=configData(DATAJSON).getData()
-            maps=configMap(data)
-            newPath=pathsX(data,"[-75.6909483, 6.338773]", "[-75.5572602, 6.2612576]")
-            #nodes=pathsX(data,str(source),str(target)).dijkstra() nodes.getData()
-            newPath.dijkstra()
-            nodesData=newPath.getData()
-            
-            #print(nodesData,str(source),str(target))
-            salt=str(datetime.datetime.now()).replace(" ","").replace("-","").replace(":","")
-            #maps.genMapMultlayer(GENMAPFILE,[maps.getPathMap(),maps.getnodesMap(),configMap.newPath(nodes.getData())])
-            fileName="map"+str(salt)+".html"
-            #writetxt(fileName,"")
-            configMap.newPath(nodesData)
-            layers=[maps.getPathMap(),maps.getnodesMap(),configMap.newPath(nodesData)]
-            maps.genMapMultlayer(fileName,layers)
+            msg=""
+            source=request.form["source"]
+            target=request.form["target"]
+            if target=="" or source=="":
+                msg="Datos invalidos, por favor ingrese cordenadas"
+            else:
+                source=source.split(",")
+                target=target.split(",")
+                data=configData(DATAJSON).getData()
+                maps=configMap(data)
+                newPath=pathsX(data,"[-75.6909483, 6.338773]", "[-75.5572602, 6.2612576]")
+                #nodes=pathsX(data,str(source),str(target)).dijkstra() nodes.getData()
+                newPath.dijkstra()
+                nodesData=newPath.getData()
+                
+                #print(nodesData,str(source),str(target))
+                salt=str(datetime.datetime.now()).replace(" ","").replace("-","").replace(":","")
+                #maps.genMapMultlayer(GENMAPFILE,[maps.getPathMap(),maps.getnodesMap(),configMap.newPath(nodes.getData())])
+                fileName="map"+str(salt)+".html"
+                #writetxt(fileName,"")
+                configMap.newPath(nodesData)
+                layers=[maps.getPathMap(),maps.getnodesMap(),configMap.newPath(nodesData)]
+                maps.genMapMultlayer(fileName,layers)
             #redirect 
-        return render_template("index.html")
+        return render_template("index.html",msg=msg)
 
     @app.route("/config")
     def config():

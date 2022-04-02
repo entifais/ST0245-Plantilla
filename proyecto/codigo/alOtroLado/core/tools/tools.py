@@ -29,12 +29,10 @@ def genPreview(name,path="",salt="genMaps"):
   txt = f'\n\t@app.route("/{salt}/{name}")\n\tdef {str(name[:-5]).replace("/","")}():\n\t\treturn render_template("{salt}/{name}")'
   return txt
 
-def initMap(dirs,dataDir):
+def initMap(dataDir):
     newCode = """from flask import Flask, render_template
 app = Flask(__name__)
 class maps():"""
-    for i in dirs:
-        newCode += genPreview(i)
     writeTxt(dataDir,newCode)
     #tryng to move to emacs is ... a disasters with tabs 
 
@@ -58,3 +56,7 @@ def blogsNames(path,tag = ".html"):
     else:
       names.append(i)
   return names
+def validData(txt,dicts):
+  for i in dicts
+    if not i in txt:return False
+    return True
