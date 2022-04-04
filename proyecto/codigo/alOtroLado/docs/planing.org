@@ -1,4 +1,4 @@
-* code planing
+ * code planing
   
 * web server
   
@@ -19,3 +19,23 @@
 ** logo
    
 ** video
+
+   
+* TODO frist delivery
+
+*** 1
+    generate map and redirect to that
+  
+*** 2
+    about
+
+* TODO second delivery
+    
+*** 3
+    geocodig
+
+*** 4
+own graph
+
+*** 5
+optimise

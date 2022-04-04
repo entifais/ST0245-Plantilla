@@ -13,12 +13,12 @@ import os
 import json
 import datetime
 
-from core.tools.tools import writetxt,readtxt,initMap
+from core.tools.tools import *
 
 #MAPNAME="tmp.html"
 #GENMAPFILE=TEMPLATEDIR+MAPNAME
 TEMPLATEDIR="templates/"
-MAPS="maps.py"
+MAPS="core/maps.py"
 
 DATACSVFILE="https://raw.githubusercontent.com/entifais/ST0245-Plantilla/master/proyecto/codigo/alOtroLado/data/calles_de_medellin_con_acoso.csv"
 DATACSVFILE="data/calles_de_medellin_con_acoso.csv"
@@ -26,33 +26,32 @@ DATAJSON="core/data/graph_medellin_all_data.json"
 
 app = Flask(__name__)
 
+print("out if")
 
-if os.path.isfile(MAPS):
-    print("if")
-    try:
-        from .maps import maps 
-        from .maps import app as appmaps 
-        joinWebpage(BLOGSFILES,appblogs,app,url=BLOGWEBDIR)
-        print("try")
-    except:
-        initMap(MAPS)
-        print("except")
+try:
+    from .maps import maps 
+    from .maps import app as appmaps 
+    joinWebpage(BLOGSFILES,appblogs,app,url=BLOGWEBDIR)
+    print("try")
+except:
+    initMap(MAPS)
+    print("except")
 #https://github.com/jero98772/B-FeelLog/blob/main/core/main.py
 class webpage():
     @app.route("/",methods=["GET","POST"])
     def index(): 
+        msg=""
         if request.method=="POST":
-            msg=""
+            validateTtxt="1234567890.,- "
             source=request.form["source"]
             target=request.form["target"]
-            if target=="" or source=="":
-                msg="Datos invalidos, por favor ingrese cordenadas"
+            if target=="" or source=="" or  not (validData(target,validateTtxt) and  validData(source,validateTtxt)):
+                msg="Datos invalidos"
             else:
-                source=source.split(",")
-                target=target.split(",")
                 data=configData(DATAJSON).getData()
                 maps=configMap(data)
-                newPath=pathsX(data,"[-75.6909483, 6.338773]", "[-75.5572602, 6.2612576]")
+                newPath=pathsX(data,"["+str(source)+"]", "["+str(target)+"]")
+                #newPath=pathsX(data,"[-75.6909483, 6.338773]", "[-75.5572602, 6.2612576]")
                 #nodes=pathsX(data,str(source),str(target)).dijkstra() nodes.getData()
                 newPath.dijkstra()
                 nodesData=newPath.getData()
@@ -68,6 +67,19 @@ class webpage():
             #redirect 
         return render_template("index.html",msg=msg)
 
+    @app.route("/about")
+    def about():
+        return render_template("about.html")
+    @app.route("/dotsdir.html")
+    def dotsdir():
+        return render_template("dotsdir.html")  
+    @app.route("/data.json")
+    def webData():
+        data=json.dumps(readtxt(DATAJSON))
+        response = app.response_class(response=data,mimetype='application/json')
+        return response
+
+    #temporal web pages
     @app.route("/config")
     def config():
         data=configData(DATAJSON).getData()
@@ -77,22 +89,6 @@ class webpage():
         #data=configData(DATACSVFILE)
         #configData.clearAllDataJson(data.getData())
         return render_template("config.html")
-    @app.route("/about")
-    def about():
-        return render_template("about.html")
-    @app.route("/<string:id>")
-    def genMap(id):
-        return render_template("index.html")
-    @app.route("/data.json")
-    def webData():
-        data=json.dumps(readtxt(DATAJSON))
-        response = app.response_class(response=data,mimetype='application/json')
-        return response
-    @app.route("/dotsdir.html")
-    def dotsdir():
-        return render_template("dotsdir.html")
-
-    #temporal web pages
     @app.route("/tmp")
     def indextmp():
         return render_template("tmp.html")
@@ -244,6 +240,7 @@ class configMap:
         print("map"*50)
         view = pdk.ViewState(latitude=6.256405968932449, longitude= -75.59835591123756, pitch=40, zoom=12)
         mapCompleate = pdk.Deck(layers=layers, initial_view_state=view)
+        #mapCompleate.deck_widget.on_click(filter_by_viewport)
         mapCompleate.to_html(fileName)
     
     def getEmptyMap(self):return self.emptyMap

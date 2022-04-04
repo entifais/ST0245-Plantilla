@@ -33,7 +33,7 @@ def initMap(dataDir):
     newCode = """from flask import Flask, render_template
 app = Flask(__name__)
 class maps():"""
-    writeTxt(dataDir,newCode)
+    writetxt(dataDir,newCode)
     #tryng to move to emacs is ... a disasters with tabs 
 
 def filesInFolders(path,tag = ".html"):
@@ -57,6 +57,15 @@ def blogsNames(path,tag = ".html"):
       names.append(i)
   return names
 def validData(txt,dicts):
-  for i in dicts
-    if not i in txt:return False
-    return True
+  tmp=False
+  for i in txt:
+    print(i, not i in dicts)
+    if not i in dicts:
+      print("no pasa")
+      tmp=False
+      break
+    else:
+      print("pasa")
+      tmp=True
+  return tmp
+#a in "asdf" yes, not flase, 1 in "asdfgh" ,no
