@@ -19,34 +19,35 @@ from core.tools.tools import *
 #GENMAPFILE=TEMPLATEDIR+MAPNAME
 TEMPLATEDIR="templates/"
 MAPS="core/maps.py"
-MAPSDIR="core/templates/maps/"
+MAPWEBADRESS="/maps/"
+MAPSDIR="core/templates"+MAPWEBADRESS
+FILES = os.listdir(MAPSDIR)
 
 DATACSVFILE="https://raw.githubusercontent.com/entifais/ST0245-Plantilla/master/proyecto/codigo/alOtroLado/data/calles_de_medellin_con_acoso.csv"
 DATACSVFILE="data/calles_de_medellin_con_acoso.csv"
 DATAJSON="core/data/graph_medellin_all_data.json"
-
 app = Flask(__name__)
-
-print("out if")
-
-try:
-    from .maps import maps 
-    from .maps import app as appmaps 
-    joinWebpage(BLOGSFILES,appblogs,app,url=BLOGWEBDIR)
-    print("try")
-except:
-    initMap(MAPS)
-    print("except")
+if os.path.isfile(MAPS):
+    try:
+        print("try")
+        from .maps import maps 
+        from .maps import app as appmaps
+        print("import")
+        joinWebpage(FILES,appmaps,app,url=MAPWEBADRESS)
+        print("join")
+    except:
+        initMap(MAPS)
+        print("except")
 #https://github.com/jero98772/B-FeelLog/blob/main/core/main.py
 class webpage():
     @app.route("/",methods=["GET","POST"])
     def index(): 
         msg=""
         if request.method=="POST":
-            validateTtxt="1234567890.,- "
+            validateTxt="1234567890.,- "
             source=request.form["source"]
             target=request.form["target"]
-            if target=="" or source=="" or  not (validData(target,validateTtxt) and  validData(source,validateTtxt)):
+            if target=="" or source=="" or  not (validData(target,validateTxt) and  validData(source,validateTxt)):
                 msg="Datos invalidos"
             else:
                 data=configData(DATAJSON).getData()
@@ -61,11 +62,15 @@ class webpage():
                 salt=str(datetime.datetime.now()).replace(" ","").replace("-","").replace(":","")
                 #maps.genMapMultlayer(GENMAPFILE,[maps.getPathMap(),maps.getnodesMap(),configMap.newPath(nodes.getData())])
                 fileName="map"+str(salt)+".html"
+
                 #writetxt(fileName,"")
                 configMap.newPath(nodesData)
                 layers=[maps.getPathMap(),maps.getnodesMap(),configMap.newPath(nodesData)]
-                maps.genMapMultlayer(fileName,layers)
-            #redirect 
+                maps.genMapMultlayer(MAPSDIR+fileName,layers)
+                serveMapCode=genPreview(fileName,MAPSDIR[:-1])
+                print(serveMapCode)
+                writetxt(MAPS,serveMapCode,"a")
+            #redirect  
         return render_template("index.html",msg=msg)
 
     @app.route("/about")

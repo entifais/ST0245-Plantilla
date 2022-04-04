@@ -1,10 +1,10 @@
 import os
-def writetxt(name,content):
+def writetxt(name,content,mode="w"):
   """
   writetxt(name,content) , write in txt file something  
   """
   content=str(content)
-  with open(name, "w") as file:
+  with open(name, mode) as file:
     file.write(content)
     file.close()
 
@@ -25,14 +25,15 @@ def joinWebpage(direccions,webApp,actualapp,url=""):
         return webApp
     return site()
 
-def genPreview(name,path="",salt="genMaps"):
-  txt = f'\n\t@app.route("/{salt}/{name}")\n\tdef {str(name[:-5]).replace("/","")}():\n\t\treturn render_template("{salt}/{name}")'
+def genPreview(name,path):
+  txt = f'\n\t@app.route("/{name}")\n\tdef {str(name[:-5]).replace("/","")}():\n\t\treturn render_template("{path}/{name}")'
   return txt
 
 def initMap(dataDir):
     newCode = """from flask import Flask, render_template
 app = Flask(__name__)
-class maps():"""
+class maps():
+    pass"""
     writetxt(dataDir,newCode)
     #tryng to move to emacs is ... a disasters with tabs 
 
@@ -59,13 +60,10 @@ def blogsNames(path,tag = ".html"):
 def validData(txt,dicts):
   tmp=False
   for i in txt:
-    print(i, not i in dicts)
     if not i in dicts:
-      print("no pasa")
       tmp=False
       break
     else:
-      print("pasa")
       tmp=True
   return tmp
 #a in "asdf" yes, not flase, 1 in "asdfgh" ,no
