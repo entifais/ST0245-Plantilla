@@ -19,6 +19,7 @@ from core.tools.tools import *
 #GENMAPFILE=TEMPLATEDIR+MAPNAME
 TEMPLATEDIR="templates/"
 MAPS="core/maps.py"
+MAPSDIR="core/templates/maps/"
 
 DATACSVFILE="https://raw.githubusercontent.com/entifais/ST0245-Plantilla/master/proyecto/codigo/alOtroLado/data/calles_de_medellin_con_acoso.csv"
 DATACSVFILE="data/calles_de_medellin_con_acoso.csv"
