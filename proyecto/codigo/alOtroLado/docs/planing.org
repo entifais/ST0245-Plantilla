@@ -36,6 +36,13 @@
 
 *** 4
 own graph
-
 *** 5
 optimise
+*** 6
+    outs dijistra
+    1 length  own graph  
+    1 length nx
+    1 risk own graph
+    1 risk nx
+    1 risk*length own graph
+    1 risk*length nx

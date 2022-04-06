@@ -31,15 +31,13 @@ app = Flask(__name__)
 
 if os.path.isfile(MAPS):
     try:
-        print("try")
         from .maps import maps 
         from .maps import app as appmaps
-        print("import")
         joinWebpage(FILES,appmaps,app,url=MAPWEBADRESS)
-        print("join")
     except:
-        initMap(MAPS)
-        print("except")
+        print("error open file")
+else:
+    initMap(MAPS)
 #https://github.com/jero98772/B-FeelLog/blob/main/core/main.py
 class webpage():
     @app.route("/",methods=["GET","POST"])
