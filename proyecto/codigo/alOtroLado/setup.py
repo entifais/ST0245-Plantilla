@@ -1,8 +1,8 @@
 #!/usr/bin/env python 
 # -*- coding: utf-8 -*-"
 """
-restes - 2022 - por jero98772
-restes - 2022 - by jero98772
+alOtroLado - 2022 - por jero98772
+alOtroLado - 2022 - by jero98772
 """
 from setuptools import setup, find_packages
 setup(
@@ -16,4 +16,4 @@ setup(
 	packages=find_packages(),
     install_requires=["Flask","pandas","networkx","pydeck"],
     include_package_data=True,
-	)
+)

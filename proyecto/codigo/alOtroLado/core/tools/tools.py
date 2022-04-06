@@ -57,6 +57,7 @@ def blogsNames(path,tag = ".html"):
     else:
       names.append(i)
   return names
+  
 def validData(txt,dicts):
   tmp=False
   for i in txt:

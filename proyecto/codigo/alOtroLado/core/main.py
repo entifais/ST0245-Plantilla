@@ -26,7 +26,9 @@ FILES = os.listdir(MAPSDIR)
 DATACSVFILE="https://raw.githubusercontent.com/entifais/ST0245-Plantilla/master/proyecto/codigo/alOtroLado/data/calles_de_medellin_con_acoso.csv"
 DATACSVFILE="data/calles_de_medellin_con_acoso.csv"
 DATAJSON="core/data/graph_medellin_all_data.json"
+
 app = Flask(__name__)
+
 if os.path.isfile(MAPS):
     try:
         print("try")
@@ -55,7 +57,7 @@ class webpage():
                 newPath=pathsX(data,"["+str(source)+"]", "["+str(target)+"]")
                 #newPath=pathsX(data,"[-75.6909483, 6.338773]", "[-75.5572602, 6.2612576]")
                 #nodes=pathsX(data,str(source),str(target)).dijkstra() nodes.getData()
-                newPath.dijkstra()
+                newPath.dijkstraNoW()
                 nodesData=newPath.getData()
                 
                 #print(nodesData,str(source),str(target))
@@ -155,6 +157,7 @@ class configData:
             except:
                 dataclear+='{"name":"'+str(i)+'","node":['+origin[0]+','+origin[1]+']},'
         writetxt(name,"["+dataclear[:-1]+"]")
+
 class graphX():
     def __init__(self,data):
         self.graph=nx.Graph()
@@ -172,6 +175,9 @@ class pathsX(graphX):
         self._target=target
     def dijkstra(self):
         self._nodes=nx.dijkstra_path(self.graph, self._source, self._target, weight='weight')
+        #return path2df(self._nodes)
+    def dijkstraNoW(self):
+        self._nodes=nx.dijkstra_path(self.graph, self._source, self._target, weight=None)
         #return path2df(self._nodes)
     def bellmanford(self):
         self._nodes=nx.shortest_path(self.graph, self._source, self._target, weight='weight', method='bellman-ford')
