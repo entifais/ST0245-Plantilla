@@ -12,6 +12,7 @@ import networkx as nx
 import os
 import json
 import datetime
+import time
 
 from core.tools.tools import *
 
@@ -71,7 +72,8 @@ class webpage():
                 serveMapCode=genPreview(fileName,"maps")
                 print(serveMapCode)
                 writetxt(MAPS,serveMapCode,"a")
-            #redirect  
+            #time.sleep(1)
+            return redirect(fileName)  
         return render_template("index.html",msg=msg)
 
     @app.route("/about")

@@ -31,13 +31,21 @@
 
 * TODO second delivery
     
+*** 0
+names
+
+data clear
+mean in weigth
+
 *** 3
     geocodig
 
 *** 4
 own graph
+
 *** 5
 optimise
+
 *** 6
     outs dijistra
     1 length  own graph  
