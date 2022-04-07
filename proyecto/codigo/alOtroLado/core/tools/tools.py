@@ -17,14 +17,13 @@ def readtxt(name):
     for i in file.readlines():
       content.append(str(i).replace("\n",""))
   return content
-
 def joinWebpage(direccions,webApp,actualapp,url=""):  
     for webroute in direccions:   
       @actualapp.route(url+webroute, endpoint=webroute , methods=['GET','POST'])
       def site():
         return webApp
     return site()
-
+    
 def genPreview(name,path):
   txt = f'\n\t@app.route("/{name}")\n\tdef {str(name[:-5]).replace("/","")}():\n\t\treturn render_template("{path}/{name}")'
   return txt
@@ -32,8 +31,7 @@ def genPreview(name,path):
 def initMap(dataDir):
     newCode = """from flask import Flask, render_template
 app = Flask(__name__)
-class maps():
-    pass"""
+class maps():"""
     writetxt(dataDir,newCode)
     #tryng to move to emacs is ... a disasters with tabs 
 

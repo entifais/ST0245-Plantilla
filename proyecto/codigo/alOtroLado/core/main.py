@@ -28,12 +28,13 @@ DATACSVFILE="data/calles_de_medellin_con_acoso.csv"
 DATAJSON="core/data/graph_medellin_all_data.json"
 
 app = Flask(__name__)
-
 if os.path.isfile(MAPS):
     try:
         from .maps import maps 
         from .maps import app as appmaps
-        joinWebpage(FILES,appmaps,app,url=MAPWEBADRESS)
+        print(FILES)
+        joinWebpage(FILES,appmaps,app,"/")
+        print("not try error")
     except:
         print("error open file")
 else:
@@ -59,7 +60,7 @@ class webpage():
                 nodesData=newPath.getData()
                 
                 #print(nodesData,str(source),str(target))
-                salt=str(datetime.datetime.now()).replace(" ","").replace("-","").replace(":","")
+                salt=str(datetime.datetime.now()).replace(" ","").replace("-","").replace(":","").replace(".","")
                 #maps.genMapMultlayer(GENMAPFILE,[maps.getPathMap(),maps.getnodesMap(),configMap.newPath(nodes.getData())])
                 fileName="map"+str(salt)+".html"
 
@@ -67,7 +68,7 @@ class webpage():
                 configMap.newPath(nodesData)
                 layers=[maps.getPathMap(),maps.getnodesMap(),configMap.newPath(nodesData)]
                 maps.genMapMultlayer(MAPSDIR+fileName,layers)
-                serveMapCode=genPreview(fileName,MAPSDIR[:-1])
+                serveMapCode=genPreview(fileName,"maps")
                 print(serveMapCode)
                 writetxt(MAPS,serveMapCode,"a")
             #redirect  
