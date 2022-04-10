@@ -3,7 +3,7 @@ import pandas as pd
 import pydeck as pdk
 
 
-data = pd.read_json("graph_medellin_all_data.json")#.head(10000)
+data = pd.read_json("data/graph_medellin_all_data.json")#.head(10000)
 Grafo = nx.Graph()
 
 source=""
@@ -63,7 +63,7 @@ print(data)
 
 pathdj=pd.DataFrame([{"name":"path","path":path}])
 print(pathdj)
-data = pd.read_json("nodes_datas.json")
+#data = pd.read_json("data/nodes_datas.json")
 
 view = pdk.ViewState(latitude=6.2564059689324, longitude= -75.5983559112375, pitch=20, zoom=15)
 layer4 = pdk.Layer(

@@ -36,3 +36,9 @@ class maps():
 	@app.route("/map20220407100129538059.html")
 	def map20220407100129538059():
 		return render_template("maps/map20220407100129538059.html")
+	@app.route("/map20220409114723311155.html")
+	def map20220409114723311155():
+		return render_template("maps/map20220409114723311155.html")
+	@app.route("/map20220409114808751979.html")
+	def map20220409114808751979():
+		return render_template("maps/map20220409114808751979.html")
