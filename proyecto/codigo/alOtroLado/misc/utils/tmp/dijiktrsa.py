@@ -1,39 +1,64 @@
-def dijkstra_algorithm(graph, start_node):
-    unvisited_nodes = list(graph.get_nodes())
- 
-    # We'll use this dict to save the cost of visiting each node and update it as we move along the graph   
-    shortest_path = {}
- 
-    # We'll use this dict to save the shortest known path to a node found so far
-    previous_nodes = {}
- 
-    # We'll use max_value to initialize the "infinity" value of the unvisited nodes   
-    max_value = sys.maxsize
-    for node in unvisited_nodes:
-        shortest_path[node] = max_value
-    # However, we initialize the starting node's value with 0   
-    shortest_path[start_node] = 0
+def dijkstra(graph, initial):
+    visited = {initial : 0}
+    path = defaultdict(list)
+
+    nodes = set(graph.nodes)
+
+    while nodes:
+        minNode = None
+        for node in nodes:
+            if node in visited:
+                if minNode is None:
+                    minNode = node
+                elif visited[node] < visited[minNode]:
+                    minNode = node
+        if minNode is None:
+            break
+
+        nodes.remove(minNode)
+        currentWeight = visited[minNode]
+
+        for edge in graph.edges[minNode]:
+            weight = currentWeight + graph.distances[(minNode, edge)]
+            if edge not in visited or weight < visited[edge]:
+                visited[edge] = weight
+                path[edge].append(minNode)
     
-    # The algorithm executes until we visit all nodes
-    while unvisited_nodes:
-        # The code block below finds the node with the lowest score
-        current_min_node = None
-        for node in unvisited_nodes: # Iterate over the nodes
-            if current_min_node == None:
-                current_min_node = node
-            elif shortest_path[node] < shortest_path[current_min_node]:
-                current_min_node = node
-                
-        # The code block below retrieves the current node's neighbors and updates their distances
-        neighbors = graph.get_outgoing_edges(current_min_node)
-        for neighbor in neighbors:
-            tentative_value = shortest_path[current_min_node] + graph.value(current_min_node, neighbor)
-            if tentative_value < shortest_path[neighbor]:
-                shortest_path[neighbor] = tentative_value
-                # We also update the best path to the current node
-                previous_nodes[neighbor] = current_min_node
- 
-        # After visiting its neighbors, we mark the node as "visited"
-        unvisited_nodes.remove(current_min_node)
-    
-    return previous_nodes, shortest_path
+    return visited, path
+#min() to visited
+
+class Dijkstra:
+
+    def __init__(self, vertices, graph):
+        self.vertices = vertices  # ("A", "B", "C" ...)
+        self.graph = graph  # {"A": {"B": 1}, "B": {"A": 3, "C": 5} ...}
+
+    def find_route(self, start, end):
+        unvisited = {n: float("inf") for n in self.vertices}
+        unvisited[start] = 0  # set start vertex to 0
+        visited = {}  # list of all visited nodes
+        parents = {}  # predecessors
+        while unvisited:
+            min_vertex = min(unvisited, key=unvisited.get)  # get smallest distance
+            for neighbour, _ in self.graph.get(min_vertex, {}).items():
+                if neighbour in visited:
+                    continue
+                new_distance = unvisited[min_vertex] + self.graph[min_vertex].get(neighbour, float("inf"))
+                if new_distance < unvisited[neighbour]:
+                    unvisited[neighbour] = new_distance
+                    parents[neighbour] = min_vertex
+            visited[min_vertex] = unvisited[min_vertex]
+            unvisited.pop(min_vertex)
+            if min_vertex == end:
+                break
+        return parents, visited
+
+    @staticmethod
+    def generate_path(parents, start, end):
+        path = [end]
+        while True:
+            key = parents[path[0]]
+            path.insert(0, key)
+            if key == start:
+                break
+        return path

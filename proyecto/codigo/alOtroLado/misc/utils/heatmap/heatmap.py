@@ -12,8 +12,8 @@ Overlaid with the satellite imagery from Mapbox to highlight the how terrain aff
 
 import pandas as pd
 import pydeck as pdk
-DATA="data/graph_medellin_all_data.json"
-
+#DATA="data/graph_medellin_all_data.json"
+DATA="can.json"
 HEADER = ["origin", "harassmentRisk"]
 data=pd.read_json(DATA)
 

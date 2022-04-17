@@ -65,4 +65,10 @@ def validData(txt,dicts):
     else:
       tmp=True
   return tmp
-#a in "asdf" yes, not flase, 1 in "asdfgh" ,no
+  
+"""docstring description
+        :param arg: parametro
+        :type arg:tipo del argumento
+        :return: retorno
+        :rtype: (tipo de dato al retonar)
+"""

@@ -147,7 +147,7 @@ class configData:
                 dataclear+='{"name":"'+str(i)+'","path": ['+"["+origin[0]+","+origin[1]+"]"+",["+destination[0]+","+destination[1]+']],"node":['+origin[0]+","+origin[1]+'],"harassmentRisk":0,"length":'+str(data["length"][i])+'},'
         writetxt(name,"["+dataclear[:-1]+"]")
 
-    def createNodes(self,data,name="out.json"):
+    def createNodes(self,data,name="data/out.json"):
         data=self.data
         dataclear = ""
         for i in range(len(data)): 
@@ -158,6 +158,65 @@ class configData:
             except:
                 dataclear+='{"name":"'+str(i)+'","node":['+origin[0]+','+origin[1]+']},'
         writetxt(name,"["+dataclear[:-1]+"]")
+    def cretejson(self,fileName="data/"):
+        import numpy as np
+
+        if fileName=="data/":
+            salt=str(datetime.datetime.now()).replace(" ","").replace("-","").replace(":","").replace(".","")
+            fileName="data"+str(salt)
+        mean=np.mean(self._data["harassmentRisk"])
+        for i in range(len(self._data)):
+            length=self._data["length"][i]
+            origin = (self._data["origin"][i][1:-1].split(","))
+            destination = (self._data["destination"][i][1:-1].split(","))
+            node=[str(self._data["origin"][i][1:-1])]
+            edges="["+str(node)+",["+str(self._data["destination"][i][1:-1])+"]]"
+            weights=(self._data["harassmentRisk"][i]*length)/length
+
+        if np.isnan(self._data["harassmentRisk"][i]) and  (self._data["name"][i]=="nan" or type(self._data["name"][i])==type(0.0)):
+            weights=(mean*length)/length
+            newdata+='{"name":"'+str(i)+'","origin":"'+str(self._data["origin"][i])+'","destination":"'+str(self._data["destination"][i])+'","length":"'+str(self._data["length"][i])+'","oneway":"'+str(self._data["oneway"][i])+'","harassmentRisk":"'+str(mean)+'","geometry":"'+str(self._data["geometry"][i])+'","weights":"'+str(weights)+'","edges":"'+str("[["+origin[0]+","+origin[1]+"]"+",["+destination[0]+","+destination[1])+']]","node":"['+origin[0]+","+origin[1]+']"},'
+        
+        elif self._data["name"][i]=="nan" or type(self._data["name"][i])==type(0.0) :
+            newdata+='{"name":"'+str(i)+'","origin":"'+str(self._data["origin"][i])+'","destination":"'+str(self._data["destination"][i])+'","length":"'+str(self._data["length"][i])+'","oneway":"'+str(self._data["oneway"][i])+'","harassmentRisk":"'+str(self._data["harassmentRisk"][i])+'","geometry":"'+str(self._data["geometry"][i])+'","weights":"'+str(weights)+'","edges":"'+str("[["+origin[0]+","+origin[1]+"]"+",["+destination[0]+","+destination[1])+']]","node":"['+origin[0]+","+origin[1]+']"},'
+        
+        elif np.isnan(self._data["harassmentRisk"][i]):
+            weights=(mean*length)/length
+            newdata+='{"name":"'+self._data["name"][i]+'","origin":"'+str(self._data["origin"][i])+'","destination":"'+str(self._data["destination"][i])+'","length":"'+str(self._data["length"][i])+'","oneway":"'+str(self._data["oneway"][i])+'","harassmentRisk":"'+str(mean)+'","geometry":"'+str(self._data["geometry"][i])+'","weights":"'+str(weights)+'","edges":"'+str("[["+origin[0]+","+origin[1]+"]"+",["+destination[0]+","+destination[1])+']]","node":"['+origin[0]+","+origin[1]+']"},'
+
+        else:
+            newdata+='{"name":"'+self._data["name"][i]+'","origin":"'+str(self._data["origin"][i])+'","destination":"'+str(self._data["destination"][i])+'","length":"'+str(self._data["length"][i])+'","oneway":"'+str(self._data["oneway"][i])+'","harassmentRisk":"'+str(self._data["harassmentRisk"][i])+'","geometry":"'+str(self._data["geometry"][i])+'","weights":"'+str(weights)+'","edges":"'+str("[["+origin[0]+","+origin[1]+"]"+",["+destination[0]+","+destination[1])+']]","node":"['+origin[0]+","+origin[1]+']"},'
+        writetxt(fileName+".json","["+newdata[:-1]+"]")
+
+    def cretecsv(self,fileName="data/"):
+        import numpy as np
+
+        newdata="name;origin;destination;length;oneway;harassmentRisk;geometry;weights;edges;node\n"
+        mean=np.mean(self._data["harassmentRisk"])
+
+        if fileName=="data/":
+            salt=str(datetime.datetime.now()).replace(" ","").replace("-","").replace(":","").replace(".","")
+            fileName="data"+str(salt)
+        for i in range(len(self._data)):
+            length=self._data["length"][i]
+            node=[str(self._data["origin"][i][1:-1])]
+            edges="["+str(node)+",["+str(self._data["destination"][i][1:-1])+"]]"
+            weights=(self._data["harassmentRisk"][i]*length)/length
+
+            if np.isnan(self._data["harassmentRisk"][i]) and  (self._data["name"][i]=="nan" or type(self._data["name"][i])==type(0.0)):
+                weights=(mean*length)/length
+                newdata+=str(i)+";"+str(self._data["origin"][i])+";"+str(self._data["destination"][i])+";"+str(self._data["length"][i])+";"+str(self._data["oneway"][i])+";"+str(mean)+";"+str(self._data["geometry"][i])+";"+str(weights)+";"+str(edges)+";"+";"+str(node)+"\n"
+            
+            elif self._data["name"][i]=="nan" or type(self._data["name"][i])==type(0.0) :
+                newdata+=str(i)+";"+str(self._data["origin"][i])+";"+str(self._data["destination"][i])+";"+str(self._data["length"][i])+";"+str(data["oneway"][i])+";"+str(self._data["harassmentRisk"][i])+";"+str(self._data["geometry"][i])+";"+str(weights)+";"+str(edges)+";"+";"+str(node)+"\n"
+            
+            elif np.isnan(self._data["harassmentRisk"][i]):
+                weights=(mean*length)/length
+                newdata+=str(data["name"][i])+";"+str(data["origin"][i])+";"+str(data["destination"][i])+";"+str(data["length"][i])+";"+str(data["oneway"][i])+";"+str(mean)+";"+str(data["geometry"][i])+";"+str(weights)+";"+str(edges)+";"+";"+str(node)+"\n"
+            
+            else:
+                newdata+=str(data["name"][i])+";"+str(data["origin"][i])+";"+str(data["destination"][i])+";"+str(data["length"][i])+";"+str(data["oneway"][i])+";"+str(data["harassmentRisk"][i])+";"+str(data["geometry"][i])+";"+str(weights)+";"+str(edges)+";"+";"+str(node)+"\n"
+            writetxt(fileName+".csv",newdata)
 
 class graphX():
     def __init__(self,data):
@@ -167,8 +226,15 @@ class graphX():
             weight=(data["length"][i])
             self.graph.add_edge(str(data["path"][i][0]),str(data["path"][i][1]),weight=weight)
             self.graph.add_node(str(node))
-
-
+    def fromFile(fileName):
+        """
+        fromFile(name) , create grafo from file 
+        """
+        content = []
+        with open(name, 'r') as file:
+            for i in file.readlines():
+            content.append(str(i).replace("\n",""))
+        return content
 class pathsX(graphX):
     def __init__(self,data,source,target):
         graphX.__init__(self,data)
