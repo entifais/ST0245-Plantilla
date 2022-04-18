@@ -65,7 +65,16 @@ def validData(txt,dicts):
     else:
       tmp=True
   return tmp
-  
+def doCallBacks(funcs,args):
+    print(funcs,args)
+    for f,i in zip(funcs,range(len(funcs))):
+      print(f,args[i])
+      f(args[i])
+      print("gencallback")
+def do2CallBacks(f1,f2,args1,args2):
+    f1(args1[0],args1[1],args1[2])
+    f2(args2[0],args2[1])
+
 """docstring description
         :param arg: parametro
         :type arg:tipo del argumento

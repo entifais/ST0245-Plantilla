@@ -4,7 +4,7 @@
 alOtrolado - 2022 - por jero98772
 alOtrolado - 2022 - by jero98772
 """
-from flask import Flask, render_template, request, flash, redirect,json
+from flask import Flask, render_template, request, flash, redirect,json,render_template_string
 import pandas as pd
 import pydeck as pdk
 import networkx as nx
@@ -30,6 +30,8 @@ DATAJSON="core/data/graph_medellin_all_data.json"
 
 app = Flask(__name__)
 if os.path.isfile(MAPS):
+    if readtxt(MAPS)=="":
+        initMap(MAPS)
     try:
         from .maps import maps 
         from .maps import app as appmaps
@@ -49,31 +51,36 @@ class webpage():
             validateTxt="1234567890.,- "
             source=request.form["source"]
             target=request.form["target"]
+
             if target=="" or source=="" or  not (validData(target,validateTxt) and  validData(source,validateTxt)):
                 msg="Datos invalidos"
+            
             else:
                 data=configData(DATAJSON).getData()
                 maps=configMap(data)
+
                 newPath=pathsX(data,"["+str(source)+"]", "["+str(target)+"]")
-                #newPath=pathsX(data,"[-75.6909483, 6.338773]", "[-75.5572602, 6.2612576]")
-                #nodes=pathsX(data,str(source),str(target)).dijkstra() nodes.getData()
                 newPath.dijkstraNoW()
-                nodesData=newPath.getData()
-                
-                #print(nodesData,str(source),str(target))
+                nodesData=newPath.getData()                
+
                 salt=str(datetime.datetime.now()).replace(" ","").replace("-","").replace(":","").replace(".","")
-                #maps.genMapMultlayer(GENMAPFILE,[maps.getPathMap(),maps.getnodesMap(),configMap.newPath(nodes.getData())])
                 fileName="map"+str(salt)+".html"
 
-                #writetxt(fileName,"")
+                serveMapCode=genPreview(fileName,"maps")
+                writetxt(MAPS,serveMapCode,"a")
+
                 configMap.newPath(nodesData)
                 layers=[maps.getPathMap(),maps.getnodesMap(),configMap.newPath(nodesData)]
                 maps.genMapMultlayer(MAPSDIR+fileName,layers)
-                serveMapCode=genPreview(fileName,"maps")
-                print(serveMapCode)
-                writetxt(MAPS,serveMapCode,"a")
-            #time.sleep(1)
-            return redirect(fileName)  
+                #print(serveMapCode)
+                funcs=[writetxt,maps.genMapMultlayer]
+                args=[[MAPS,serveMapCode,"a"],[MAPSDIR+fileName,layers]]
+                #doCallBacks(funcs,args)
+                #do2CallBacks(writetxt,maps.genMapMultlayer,[MAPS,serveMapCode,"a"],[MAPSDIR+fileName,layers])
+                #return render_template_string("<iframe src='"+str(fileName)+"' scrolling='no'> </iframe>")
+                return redirect(fileName)
+#-75.5728073, 6.2089065
+#-75.5677178, 6.2104026
         return render_template("index.html",msg=msg)
 
     @app.route("/about")
@@ -226,15 +233,15 @@ class graphX():
             weight=(data["length"][i])
             self.graph.add_edge(str(data["path"][i][0]),str(data["path"][i][1]),weight=weight)
             self.graph.add_node(str(node))
-    def fromFile(fileName):
+    #def fromFile(fileName):
         """
         fromFile(name) , create grafo from file 
-        """
         content = []
         with open(name, 'r') as file:
             for i in file.readlines():
             content.append(str(i).replace("\n",""))
         return content
+        """
 class pathsX(graphX):
     def __init__(self,data,source,target):
         graphX.__init__(self,data)
@@ -316,7 +323,7 @@ class configMap:
         )
         return newPath
     def genMapMultlayer(self,fileName,layers:list):
-        print("map"*50)
+        #print("map"*50)
         view = pdk.ViewState(latitude=6.256405968932449, longitude= -75.59835591123756, pitch=40, zoom=12)
         mapCompleate = pdk.Deck(layers=layers, initial_view_state=view)
         #mapCompleate.deck_widget.on_click(filter_by_viewport)
