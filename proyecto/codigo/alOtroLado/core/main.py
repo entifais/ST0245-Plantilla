@@ -84,7 +84,7 @@ class webpage():
 #-75.5677178, 6.2104026
         return render_template("index.html",msg=msg)
 
-    @app.route("/about")
+    @app.route("/about.html")
     def about():
         return render_template("about.html")
     @app.route("/dotsdir.html")
