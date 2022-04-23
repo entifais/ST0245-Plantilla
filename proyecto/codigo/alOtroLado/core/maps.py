@@ -31,3 +31,24 @@ class maps():
 	@app.route("/map20220422231928504566.html")
 	def map20220422231928504566():
 		return render_template("maps/map20220422231928504566.html")
+	@app.route("/map20220423121037339954.html")
+	def map20220423121037339954():
+		return render_template("maps/map20220423121037339954.html")
+	@app.route("/map20220423121649829071.html")
+	def map20220423121649829071():
+		return render_template("maps/map20220423121649829071.html")
+	@app.route("/map20220423174332951903.html")
+	def map20220423174332951903():
+		return render_template("maps/map20220423174332951903.html")
+	@app.route("/map20220423174522543607.html")
+	def map20220423174522543607():
+		return render_template("maps/map20220423174522543607.html")
+	@app.route("/map20220423174619348968.html")
+	def map20220423174619348968():
+		return render_template("maps/map20220423174619348968.html")
+	@app.route("/map20220423174638304178.html")
+	def map20220423174638304178():
+		return render_template("maps/map20220423174638304178.html")
+	@app.route("/map20220423175005575635.html")
+	def map20220423175005575635():
+		return render_template("maps/map20220423175005575635.html")

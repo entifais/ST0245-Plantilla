@@ -255,22 +255,22 @@ def cretejson():
         if np.isnan(data["harassmentRisk"][i]) and  (data["name"][i]=="nan" or type(data["name"][i])==type(0.0)):
             weights=(mean*length)/length
             #print(data["harassmentRisk"][i],"if")
-            newdata+='{"name":"'+str(i)+'","origin":"'+str(data["origin"][i])+'","destination":"'+str(data["destination"][i])+'","length":"'+str(data["length"][i])+'","oneway":"'+str(data["oneway"][i])+'","harassmentRisk":"'+str(mean)+'","geometry":"'+str(data["geometry"][i])+'","weights":"'+str(weights)+'","edges":"'+str("[["+origin[0]+","+origin[1]+"]"+",["+destination[0]+","+destination[1])+']]","node":"['+origin[0]+","+origin[1]+']"},'
+            newdata+='{"name":"'+str(i)+'","origin":"'+str(data["origin"][i])+'","destination":"'+str(data["destination"][i])+'","length":"'+str(data["length"][i])+'","oneway":"'+str(data["oneway"][i])+'","harassmentRisk":"'+str(mean)+'","geometry":"'+str(data["geometry"][i])+'","weights":'+str(weights)+',"edges":'+str("[["+origin[0]+","+origin[1]+"]"+",["+destination[0]+","+destination[1])+']],"node":['+origin[0]+","+origin[1]+']},'
         elif data["name"][i]=="nan" or type(data["name"][i])==type(0.0) :
             #print("name",i)
             #data["name"][i]=str(i)
 
-            newdata+='{"name":"'+str(i)+'","origin":"'+str(data["origin"][i])+'","destination":"'+str(data["destination"][i])+'","length":"'+str(data["length"][i])+'","oneway":"'+str(data["oneway"][i])+'","harassmentRisk":"'+str(data["harassmentRisk"][i])+'","geometry":"'+str(data["geometry"][i])+'","weights":"'+str(weights)+'","edges":"'+str("[["+origin[0]+","+origin[1]+"]"+",["+destination[0]+","+destination[1])+']]","node":"['+origin[0]+","+origin[1]+']"},'
+            newdata+='{"name":"'+str(i)+'","origin":"'+str(data["origin"][i])+'","destination":"'+str(data["destination"][i])+'","length":"'+str(data["length"][i])+'","oneway":"'+str(data["oneway"][i])+'","harassmentRisk":"'+str(data["harassmentRisk"][i])+'","geometry":"'+str(data["geometry"][i])+'","weights":'+str(weights)+',"edges":'+str("[["+origin[0]+","+origin[1]+"]"+",["+destination[0]+","+destination[1])+']],"node":['+origin[0]+","+origin[1]+']},'
         elif np.isnan(data["harassmentRisk"][i]):# or str(type(testvaluetype))=="<class 'numpy.float64'>":
             #print("harassmentRisk",i)
             #print(data["harassmentRisk"][i])
             weights=(mean*length)/length
             #data["harassmentRisk"][i]=mean
             #newdata+=str(data["name"][i])+";"+str(data["origin"][i])+";"+str(data["destination"][i])+";"+str(data["length"][i])+";"+str(data["oneway"][i])+";"+str(mean)+";"+str(data["geometry"][i])+";"+str(weights)+";"+str(edges)+";"+";"+str(node)+"\n"
-            newdata+='{"name":"'+data["name"][i]+'","origin":"'+str(data["origin"][i])+'","destination":"'+str(data["destination"][i])+'","length":"'+str(data["length"][i])+'","oneway":"'+str(data["oneway"][i])+'","harassmentRisk":"'+str(mean)+'","geometry":"'+str(data["geometry"][i])+'","weights":"'+str(weights)+'","edges":"'+str("[["+origin[0]+","+origin[1]+"]"+",["+destination[0]+","+destination[1])+']]","node":"['+origin[0]+","+origin[1]+']"},'
+            newdata+='{"name":"'+data["name"][i]+'","origin":"'+str(data["origin"][i])+'","destination":"'+str(data["destination"][i])+'","length":"'+str(data["length"][i])+'","oneway":"'+str(data["oneway"][i])+'","harassmentRisk":"'+str(mean)+'","geometry":"'+str(data["geometry"][i])+'","weights":'+str(weights)+',"edges":'+str("[["+origin[0]+","+origin[1]+"]"+",["+destination[0]+","+destination[1])+']],"node":['+origin[0]+","+origin[1]+']},'
         else:
             #newdata+=str(data["name"][i])+";"+str(data["origin"][i])+";"+str(data["destination"][i])+";"+str(data["length"][i])+";"+str(data["oneway"][i])+";"+str(data["harassmentRisk"][i])+";"+str(data["geometry"][i])+";"+str(weights)+";"+str(edges)+";"+";"+str(node)+"\n"
-            newdata+='{"name":"'+data["name"][i]+'","origin":"'+str(data["origin"][i])+'","destination":"'+str(data["destination"][i])+'","length":"'+str(data["length"][i])+'","oneway":"'+str(data["oneway"][i])+'","harassmentRisk":"'+str(data["harassmentRisk"][i])+'","geometry":"'+str(data["geometry"][i])+'","weights":"'+str(weights)+'","edges":"'+str("[["+origin[0]+","+origin[1]+"]"+",["+destination[0]+","+destination[1])+']]","node":"['+origin[0]+","+origin[1]+']"},'
+            newdata+='{"name":"'+data["name"][i]+'","origin":"'+str(data["origin"][i])+'","destination":"'+str(data["destination"][i])+'","length":"'+str(data["length"][i])+'","oneway":"'+str(data["oneway"][i])+'","harassmentRisk":"'+str(data["harassmentRisk"][i])+'","geometry":"'+str(data["geometry"][i])+'","weights":'+str(weights)+',"edges":'+str("[["+origin[0]+","+origin[1]+"]"+",["+destination[0]+","+destination[1])+']],"node":['+origin[0]+","+origin[1]+']},'
 
         #harassmentRisk=data["harassmentRisk"][i]
         
@@ -286,5 +286,5 @@ def cretejson():
 
     writetxt(name+".json","["+newdata[:-1]+"]")
 
-cretecsv()
+#cretecsv()
 cretejson()

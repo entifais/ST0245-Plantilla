@@ -39,6 +39,8 @@ mean in weigth
 
 *** 3
     geocodig
+    or
+    dots hyperlinks
 
 *** 4
 own graph

@@ -26,7 +26,8 @@ FILES = os.listdir(MAPSDIR)
 
 DATACSVFILE="https://raw.githubusercontent.com/entifais/ST0245-Plantilla/master/proyecto/codigo/alOtroLado/data/calles_de_medellin_con_acoso.csv"
 DATACSVFILE="data/calles_de_medellin_con_acoso.csv"
-DATAJSON="core/data/graph_medellin_all_data.json"
+DATANODESJSON="core/data/nodes_data.json"
+DATAJSON="core/data/medellin_data.json"
 
 app = Flask(__name__)
 if os.path.isfile(MAPS):
@@ -56,11 +57,12 @@ class webpage():
                 msg="Datos invalidos"
             
             else:
+                print
                 data=configData(DATAJSON).getData()
                 maps=configMap(data)
 
                 newPath=pathsX(data,"["+str(source)+"]", "["+str(target)+"]")
-                newPath.dijkstraNoW()
+                newPath.dijkstra()
                 nodesData=newPath.getData()                
 
                 salt=str(datetime.datetime.now()).replace(" ","").replace("-","").replace(":","").replace(".","")
@@ -91,32 +93,40 @@ class webpage():
     def dotsdir():
         return render_template("dotsdir.html")  
     @app.route("/data.json")
-    def webData():
+    def webDataJson():
         data=json.dumps(readtxt(DATAJSON))
         response = app.response_class(response=data,mimetype='application/json')
         return response
+
+    @app.route("/nodes.json")
+    def webDataNodes():
+        data=json.dumps(readtxt(DATANODESJSON))
+        response = app.response_class(response=data,mimetype='application/json')
+        return response
+
     @app.route("/ineedtimetowork/<string:fileName>",methods=["GET","POST"])
     def redirected(fileName):
         #print(fileName)#   <meta http-equiv="refresh" content="5; URL=https://www.bitdegree.org/" />
         #return '<meta http-equiv="refresh" content="2; URL='+fileName+'" />'
         #return render_template_string('<h1>please wait</h1> <form method="POST"> <meta http-equiv="refresh" content="2; URL='+fileName+'" /></form>')
     
-        return "<h1>please wait my algoritm is very faster for this webpage</h1><script>setTimeout(function () {window.location.href = '/"+fileName+"';}, 1);</script>"
+        return "<h1>please wait, my algoritm is very faster for this web</h1><script>setTimeout(function () {window.location.href = '/"+fileName+"';}, 1);</script>"
         #time.sleep(1)
         return redirect(fileName)
     #temporal web pages
     @app.route("/config")
     def config():
         data=configData(DATAJSON).getData()
+        print(data)
         data.createNodes(data)
         #play with algoritm
         #data=configData(DATAJSON).getData()
         #data=configData(DATACSVFILE)
         #configData.clearAllDataJson(data.getData())
         return render_template("config.html")
-    @app.route("/tmp")
+    @app.route("/heatmap.html")
     def indextmp():
-        return render_template("tmp.html")
+        return render_template("heatmap.html")
     @app.route("/mapBase")
     def webMapBase():
         return render_template("mapBase.html")
@@ -240,7 +250,7 @@ class graphX():
         for i in range(len(data)):
             node=data["node"][i]
             weight=(data["length"][i])
-            self.graph.add_edge(str(data["path"][i][0]),str(data["path"][i][1]),weight=weight)
+            self.graph.add_edge(str(data["edges"][i][0]),str(data["edges"][i][1]),weight=weight)
             self.graph.add_node(str(node))
     #def fromFile(fileName):
         """
@@ -288,7 +298,7 @@ class configMap:
             get_color=(0,155,0),
             width_scale=1,
             width_min_pixels=1,
-            get_path="path",
+            get_path="edges",
             get_width=1,
         )
 
@@ -299,7 +309,7 @@ class configMap:
             get_color=(0,155,0),
             width_scale=1,
             width_min_pixels=1,
-            get_path="path",
+            get_path="edges",
             get_width=2,
         )
 
