@@ -78,7 +78,8 @@ class webpage():
                 #doCallBacks(funcs,args)
                 #do2CallBacks(writetxt,maps.genMapMultlayer,[MAPS,serveMapCode,"a"],[MAPSDIR+fileName,layers])
                 #return render_template_string("<iframe src='"+str(fileName)+"' scrolling='no'> </iframe>")
-                return redirect(fileName)
+                return redirect("/ineedtimetowork/"+fileName)
+                #redirect("/ineedtimetowork/"+fileName)
 #-75.5728073, 6.2089065
 #-75.5677178, 6.2104026
         return render_template("index.html",msg=msg)
@@ -94,7 +95,15 @@ class webpage():
         data=json.dumps(readtxt(DATAJSON))
         response = app.response_class(response=data,mimetype='application/json')
         return response
-
+    @app.route("/ineedtimetowork/<string:fileName>",methods=["GET","POST"])
+    def redirected(fileName):
+        #print(fileName)#   <meta http-equiv="refresh" content="5; URL=https://www.bitdegree.org/" />
+        #return '<meta http-equiv="refresh" content="2; URL='+fileName+'" />'
+        #return render_template_string('<h1>please wait</h1> <form method="POST"> <meta http-equiv="refresh" content="2; URL='+fileName+'" /></form>')
+    
+        return "<h1>please wait my algoritm is very faster for this webpage</h1><script>setTimeout(function () {window.location.href = '/"+fileName+"';}, 1);</script>"
+        #time.sleep(1)
+        return redirect(fileName)
     #temporal web pages
     @app.route("/config")
     def config():
