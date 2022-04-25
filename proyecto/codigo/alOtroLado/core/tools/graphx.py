@@ -9,7 +9,7 @@ class graph:
     def __init__(self):
         self.graph={}            
 
-    def addEdges(self,source,dest, weight): 
+    def add_edge(self,source,dest, weight): 
         vert=node(dest, weight)
         if source in self.graph:
             vert.next=self.graph[source]
@@ -20,4 +20,4 @@ class graph:
         self.graph[source]= vertice
 
 class dijkstra:
-    def __init__(self)
+    def __init__(self):

@@ -56,3 +56,9 @@ optimise
     1 risk nx
     1 risk*length own graph
     1 risk*length nx
+
+* Todo
+*** DONE data
+*** implementatios
+*** optimisations
+    

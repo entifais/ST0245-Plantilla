@@ -28,7 +28,10 @@ def genPreview(name,path):
   txt = f'\n\t@app.route("/{name}")\n\tdef {str(name[:-5]).replace("/","")}():\n\t\treturn render_template("{path}/{name}")'
   return txt
 
-def initMap(dataDir):
+def initMap(dataDir:str)->None:
+  """generate python file
+"""
+
     newCode = """from flask import Flask, render_template
 app = Flask(__name__)
 class maps():"""
@@ -36,6 +39,8 @@ class maps():"""
     #tryng to move to emacs is ... a disasters with tabs 
 
 def filesInFolders(path,tag = ".html"):
+  """
+  """
   folderFiles = os.listdir(path)
   files = []
   for i in folderFiles:
@@ -46,17 +51,10 @@ def filesInFolders(path,tag = ".html"):
       files +=  [i]
   return files
 
-def blogsNames(path,tag = ".html"):
-  blogs = os.listdir(path)
-  names = []
-  for i in blogs:
-    if i[len(tag)*-1:] == tag:
-      names.append(i[:len(tag)*-1])
-    else:
-      names.append(i)
-  return names
-  
-def validData(txt,dicts):
+def validData(txt:str,dicts:list)-> bool:
+  """validData(txt:str,dicts:list)-> bool
+  check if data is valid, if character is in dicts is not valid
+  """
   tmp=False
   for i in txt:
     if not i in dicts:
@@ -65,19 +63,4 @@ def validData(txt,dicts):
     else:
       tmp=True
   return tmp
-def doCallBacks(funcs,args):
-    print(funcs,args)
-    for f,i in zip(funcs,range(len(funcs))):
-      print(f,args[i])
-      f(args[i])
-      print("gencallback")
-def do2CallBacks(f1,f2,args1,args2):
-    f1(args1[0],args1[1],args1[2])
-    f2(args2[0],args2[1])
 
-"""docstring description
-        :param arg: parametro
-        :type arg:tipo del argumento
-        :return: retorno
-        :rtype: (tipo de dato al retonar)
-"""
