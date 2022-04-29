@@ -64,3 +64,10 @@ def validData(txt:str,dicts:list)-> bool:
       tmp=True
   return tmp
 
+def readRealtime(name:str,sep=";":str):
+  """
+  readRealtime(name:str,sep=";":str)) , is a genteretor return row of csv at iteration 
+  """
+  with open(name, 'r') as file:
+    for i in file.readlines():
+      yield i.split(sep)

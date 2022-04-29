@@ -60,5 +60,6 @@ optimise
 * Todo
 *** DONE data
 *** implementatios
-*** optimisations
-    
+*** DONE optimisations
+*** info web page and test cases
+*** html pydeck
