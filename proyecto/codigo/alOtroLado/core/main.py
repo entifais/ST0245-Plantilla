@@ -45,6 +45,7 @@ else:
     initMap(MAPS)
 #https://github.com/jero98772/B-FeelLog/blob/main/core/main.py
 class webpage():
+    #web app 
     @app.route("/",methods=["GET","POST"])
     def index(): 
         msg=""
@@ -81,59 +82,46 @@ class webpage():
                 #do2CallBacks(writetxt,maps.genMapMultlayer,[MAPS,serveMapCode,"a"],[MAPSDIR+fileName,layers])
                 #return render_template_string("<iframe src='"+str(fileName)+"' scrolling='no'> </iframe>")
                 return redirect("/ineedtimetowork/"+fileName)
-                #redirect("/ineedtimetowork/"+fileName)
-#-75.5728073, 6.2089065
-#-75.5677178, 6.2104026
         return render_template("index.html",msg=msg)
 
+    #information web page
     @app.route("/about.html")
     def about():
         return render_template("about.html")
+
+    #geografic visualisations
+    @app.route("/mapBase.html")
+    def webMapBase():
+        return render_template("mapBase.html")
     @app.route("/dotsdir.html")
     def dotsdir():
-        return render_template("dotsdir.html")  
+        return render_template("mapsplots/dotsdir.html")  
+    @app.route("/heatmap.html")
+    def heatmap():
+        return render_template("mapsplots/heatmap.html")
+    @app.route("/medellingraph.html")
+    def medellingraph():
+        return render_template("mapsplots/medellingraph.html")
+
+    #data
     @app.route("/data.json")
     def webDataJson():
         data=json.dumps(readtxt(DATAJSON))
         response = app.response_class(response=data,mimetype='application/json')
         return response
-
     @app.route("/nodes.json")
     def webDataNodes():
         data=json.dumps(readtxt(DATANODESJSON))
         response = app.response_class(response=data,mimetype='application/json')
         return response
 
+    #redirection to make time,for fix error 
     @app.route("/ineedtimetowork/<string:fileName>",methods=["GET","POST"])
     def redirected(fileName):
-        #print(fileName)#   <meta http-equiv="refresh" content="5; URL=https://www.bitdegree.org/" />
-        #return '<meta http-equiv="refresh" content="2; URL='+fileName+'" />'
-        #return render_template_string('<h1>please wait</h1> <form method="POST"> <meta http-equiv="refresh" content="2; URL='+fileName+'" /></form>')
-    
         return "<h1>please wait, my algoritm is very faster for this web</h1><script>setTimeout(function () {window.location.href = '/"+fileName+"';}, 1);</script>"
-        #time.sleep(1)
         return redirect(fileName)
-    #temporal web pages
-    @app.route("/config")
-    def config():
-        data=configData(DATAJSON).getData()
-        print(data)
-        data.createNodes(data)
-        #play with algoritm
-        #data=configData(DATAJSON).getData()
-        #data=configData(DATACSVFILE)
-        #configData.clearAllDataJson(data.getData())
-        return render_template("config.html")
-    @app.route("/heatmap.html")
-    def indextmp():
-        return render_template("heatmap.html")
-    @app.route("/mapBase")
-    def webMapBase():
-        return render_template("mapBase.html")
-    @app.route("/map")
-    def webMap():
-        return render_template(MAPNAME)
-
+  
+ 
 class configData:
     def __init__(self,file,sep=";"):
         self._data=""

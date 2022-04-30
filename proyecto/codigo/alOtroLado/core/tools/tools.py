@@ -25,20 +25,21 @@ def joinWebpage(direccions,webApp,actualapp,url=""):
     return site()
     
 def genPreview(name,path):
-  txt = f'\n\t@app.route("/{name}")\n\tdef {str(name[:-5]).replace("/","")}():\n\t\treturn render_template("{path}/{name}")'
-  return txt
+    txt = f'\n\t@app.route("/{name}")\n\tdef {str(name[:-5]).replace("/","")}():\n\t\treturn render_template("{path}/{name}")'
+    return txt
 
 def initMap(dataDir:str)->None:
-  """generate python file
-"""
-
+    """
+    initMap(dataDir:str)->None
+    create python file with code for add flask,like the code that generates genPreview 
+    """
     newCode = """from flask import Flask, render_template
 app = Flask(__name__)
 class maps():"""
     writetxt(dataDir,newCode)
     #tryng to move to emacs is ... a disasters with tabs 
 
-def filesInFolders(path,tag = ".html"):
+def filesInFolders(path:str,tag = ".html")->list:
   """
   """
   folderFiles = os.listdir(path)
@@ -64,7 +65,7 @@ def validData(txt:str,dicts:list)-> bool:
       tmp=True
   return tmp
 
-def readRealtime(name:str,sep=";":str):
+def readRealtime(name:str,sep=";"):
   """
   readRealtime(name:str,sep=";":str)) , is a genteretor return row of csv at iteration 
   """
