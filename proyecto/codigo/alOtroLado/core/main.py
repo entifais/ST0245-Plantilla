@@ -16,8 +16,6 @@ import time
 
 from core.tools.tools import *
 
-#MAPNAME="tmp.html"
-#GENMAPFILE=TEMPLATEDIR+MAPNAME
 TEMPLATEDIR="templates/"
 MAPS="core/maps.py"
 MAPWEBADRESS="/maps/"

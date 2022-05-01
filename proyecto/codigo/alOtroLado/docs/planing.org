@@ -59,7 +59,7 @@ optimise
 
 * Todo
 *** DONE data
-*** implementatios
+*** implementatios dijikstra
 *** DONE optimisations
 *** info web page and test cases
-*** html pydeck
+*** html pydeck ,get node addres
