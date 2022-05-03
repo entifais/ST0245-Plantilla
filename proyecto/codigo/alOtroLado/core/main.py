@@ -60,7 +60,7 @@ class webpage():
                 data=configData(DATAJSON).getData()
                 maps=configMap(data)
 
-                newPath=pathsX(data,"["+str(source)+"]", "["+str(target)+"]")
+                newPath=pathsX(data,"["+str(source)+"]", "["+str(target)+"]",fastgraphX)
                 newPath.dijkstra()
                 nodesData=newPath.getData()                
 
@@ -73,12 +73,8 @@ class webpage():
                 configMap.newPath(nodesData)
                 layers=[maps.getPathMap(),maps.getnodesMap(),configMap.newPath(nodesData)]
                 maps.genMapMultlayer(MAPSDIR+fileName,layers)
-                #print(serveMapCode)
                 funcs=[writetxt,maps.genMapMultlayer]
                 args=[[MAPS,serveMapCode,"a"],[MAPSDIR+fileName,layers]]
-                #doCallBacks(funcs,args)
-                #do2CallBacks(writetxt,maps.genMapMultlayer,[MAPS,serveMapCode,"a"],[MAPSDIR+fileName,layers])
-                #return render_template_string("<iframe src='"+str(fileName)+"' scrolling='no'> </iframe>")
                 return redirect("/ineedtimetowork/"+fileName)
         return render_template("index.html",msg=msg)
 
@@ -238,18 +234,27 @@ class graphX():
             weight=(data["length"][i])
             self.graph.add_edge(str(data["edges"][i][0]),str(data["edges"][i][1]),weight=weight)
             self.graph.add_node(str(node))
-    #def fromFile(fileName):
+class fastgraphX():
+    def __init__(self,file):
+        self.graph=nx.Graph()
+        i=0
+        for data in readRealtime(file,sep=";"): 
+            if i==0:
+                pass
+            else:
+                edge=eval(data[-2])#.split("],[")
+                self.graph.add_edge(str(edge[0]),str(edge[1]),weight=data[-3])
+                self.graph.add_node(str(data[-1][:-2]))
+            i+=1
+
+class pathsX():
+    def __init__(self,data,source,target,graphtype):
         """
-        fromFile(name) , create grafo from file 
-        content = []
-        with open(name, 'r') as file:
-            for i in file.readlines():
-            content.append(str(i).replace("\n",""))
-        return content
+        modes
+        fast
+        nofast
         """
-class pathsX(graphX):
-    def __init__(self,data,source,target):
-        graphX.__init__(self,data)
+        graphtype.__init__(self,data)
         self._source=source
         self._target=target
     def dijkstra(self):
