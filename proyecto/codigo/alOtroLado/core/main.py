@@ -26,7 +26,7 @@ DATACSVFILE="https://raw.githubusercontent.com/entifais/ST0245-Plantilla/master/
 DATACSVFILE="data/calles_de_medellin_con_acoso.csv"
 DATANODESJSON="core/data/nodes_data.json"
 DATAJSON="core/data/medellin_data.json"
-
+DATACOMPLETE="core/data/data_csv.csv"
 app = Flask(__name__)
 if os.path.isfile(MAPS):
     if readtxt(MAPS)=="":
@@ -60,10 +60,12 @@ class webpage():
                 data=configData(DATAJSON).getData()
                 maps=configMap(data)
 
-                newPath=pathsX(data,"["+str(source)+"]", "["+str(target)+"]",fastgraphX)
+                #newPath=pathsX(data,"["+str(source)+"]", "["+str(target)+"]",graphX)
+                newPath=pathsX(DATACOMPLETE,"["+str(source)+"]", "["+str(target)+"]",fastgraphX)
+                #newPath.printg()
                 newPath.dijkstra()
                 nodesData=newPath.getData()                
-
+                #print(nodesData)
                 salt=str(datetime.datetime.now()).replace(" ","").replace("-","").replace(":","").replace(".","")
                 fileName="map"+str(salt)+".html"
 
@@ -96,6 +98,12 @@ class webpage():
     @app.route("/medellingraph.html")
     def medellingraph():
         return render_template("mapsplots/medellingraph.html")
+    
+    #tests 
+    @app.route("/concord2tesoro.html")
+    def medellingraph():
+        return render_template("examples/concord2tesoro.html")
+
 
     #data
     @app.route("/data.json")
@@ -237,17 +245,21 @@ class graphX():
 class fastgraphX():
     def __init__(self,file):
         self.graph=nx.Graph()
+        print(file,"\n"*5)
+        print(os.listdir())
         i=0
         for data in readRealtime(file,sep=";"): 
+            print(data[0])
             if i==0:
-                pass
+                continue
             else:
                 edge=eval(data[-2])#.split("],[")
                 self.graph.add_edge(str(edge[0]),str(edge[1]),weight=data[-3])
                 self.graph.add_node(str(data[-1][:-2]))
             i+=1
+        print(self.graph.nodes())
 
-class pathsX():
+class pathsX(fastgraphX,graphX):
     def __init__(self,data,source,target,graphtype):
         """
         modes
@@ -257,6 +269,7 @@ class pathsX():
         graphtype.__init__(self,data)
         self._source=source
         self._target=target
+        print()
     def dijkstra(self):
         self._nodes=nx.dijkstra_path(self.graph, self._source, self._target, weight='weight')
         #return path2df(self._nodes)
@@ -274,6 +287,8 @@ class pathsX():
         """
         pathdf=pd.DataFrame([{"name":"path","path":[eval(i) for i in self._nodes]}])
         return pathdf
+    def printg(self):
+        print(self.graph.to_string())
 #self._nodes=nx.dijkstra_path(Grafo, "[-75.6909483, 6.338773]", "[-75.5572602, 6.2612576]", weight=None)
 #self._nodes=nx.shortest_path(Grafo, "[-75.6909483, 6.338773]", "[-75.5705202, 6.2106275]", weight=None, method='bellman-ford')
 #nodes=nx.shortest_path(Grafo, "[-75.6909483, 6.338773]", "[-75.5705202, 6.2106275]", weight='weight', method='dijkstra')
