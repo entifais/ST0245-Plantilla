@@ -19,7 +19,6 @@
 ** logo
    
 ** video
-
    
 * TODO frist delivery
 
