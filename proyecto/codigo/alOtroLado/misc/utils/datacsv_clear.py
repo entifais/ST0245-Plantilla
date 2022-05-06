@@ -195,6 +195,7 @@ def cretecsv():
         length=data["length"][i]
         #harassmentRisk=data["harassmentRisk"][i]
         node=str(data["origin"][i][1:-1])
+        noded=str(data["destination"][i][1:-1])
         edges="[["+str(node)+"],["+str(data["destination"][i][1:-1])+"]]"
         weights=(data["harassmentRisk"][i]*length)/length
         #name=data["name"][i]
@@ -212,7 +213,7 @@ def cretecsv():
             #print("harassmentRisk",i)
             #data["harassmentRisk"][i]=mean
             weights=(mean*length)/length
-            newdata+=str(data["name"][i])+";"+str(data["origin"][i])+";"+str(data["destination"][i])+";"+str(data["length"][i])+";"+str(data["oneway"][i])+";"+str(mean)+";"+str(data["geometry"][i])+";"+str(weights)+";"+str(edges)+";"+str(node)+"\n"
+            newdata+=str(data["name"][i])+";"+str(data["origin"][i])+";"+str(data["destination"][i])+";"+str(data["length"][i])+";"+str(data["oneway"][i])+";"+str(mean)+";"+str(data["geometry"][i])+";"+str(weights)+";"+str(edges)+";"+str(node)#+"\n"
         else:
             newdata+=str(data["name"][i])+";"+str(data["origin"][i])+";"+str(data["destination"][i])+";"+str(data["length"][i])+";"+str(data["oneway"][i])+";"+str(data["harassmentRisk"][i])+";"+str(data["geometry"][i])+";"+str(weights)+";"+str(edges)+";"+str(node)#+"\n"
         #harassmentRisk=data["harassmentRisk"][i]

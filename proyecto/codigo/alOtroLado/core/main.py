@@ -47,8 +47,15 @@ class webpage():
     @app.route("/",methods=["GET","POST"])
     def index(): 
         msg=""
+        data=configData(DATAJSON).getData()
+        maps=configMap(data)
+
+        #newPath=pathsX(data,"["+str(source)+"]", "["+str(target)+"]",graphX)
+        #newPath=pathsX(DATACOMPLETE,"["+str("a")+"]", "["+str("b")+"]",fastgraphX)
+        #newPath.printg()
+
         if request.method=="POST":
-            validateTxt="1234567890.,- "
+            validateTxt="1234567890.,- []'"
             source=request.form["source"]
             target=request.form["target"]
 
@@ -59,9 +66,9 @@ class webpage():
                 print
                 data=configData(DATAJSON).getData()
                 maps=configMap(data)
-
-                #newPath=pathsX(data,"["+str(source)+"]", "["+str(target)+"]",graphX)
-                newPath=pathsX(DATACOMPLETE,"["+str(source)+"]", "["+str(target)+"]",fastgraphX)
+                print(source,target)
+                newPath=pathsX(data,"["+str(source)+"]", "["+str(target)+"]",graphX)
+                #newPath=pathsX(DATACOMPLETE,str(source),str(target),fastgraphX)
                 #newPath.printg()
                 newPath.dijkstra()
                 nodesData=newPath.getData()                
@@ -101,8 +108,12 @@ class webpage():
     
     #tests 
     @app.route("/concord2tesoro.html")
-    def medellingraph():
+    def concord2tesoro():
         return render_template("examples/concord2tesoro.html")
+    @app.route("/eafit_santafe.html")
+    def eafit_santafe():
+        return render_template("examples/eafit_santafe.html")
+
 
 
     #data
@@ -242,43 +253,53 @@ class graphX():
             weight=(data["length"][i])
             self.graph.add_edge(str(data["edges"][i][0]),str(data["edges"][i][1]),weight=weight)
             self.graph.add_node(str(node))
+
 class fastgraphX():
     def __init__(self,file):
         self.graph=nx.Graph()
-        print(file,"\n"*5)
-        print(os.listdir())
+        #print(file,"\n"*5)
+        #print(os.listdir())
         i=0
         for data in readRealtime(file,sep=";"): 
-            print(data[0])
+            #print(list(data[-1][1:-2]))
             if i==0:
-                continue
+                #print("uno")
+                i+=1
             else:
-                edge=eval(data[-2])#.split("],[")
-                self.graph.add_edge(str(edge[0]),str(edge[1]),weight=data[-3])
-                self.graph.add_node(str(data[-1][:-2]))
+                #print(data[-2],data[-3])
+                edge=data[-2][2:-2].split("],[")
+                #print(data[-1],data[-1][:-1])#,edge,type(float(data[-3])),float(data[-3]))
+                #print(data[-1][1:-2],data[-2],data[-3],type(data[-2]))
+                self.graph.add_edge(str(edge[0]),str(edge[1]),weight=float(data[-3]))
+                self.graph.add_node(str(data[-1][:-1]))
             i+=1
-        print(self.graph.nodes())
+        #print(self.graph.nodes())
 
-class pathsX(fastgraphX,graphX):
+class pathsX(graphX):
     def __init__(self,data,source,target,graphtype):
         """
         modes
         fast
         nofast
         """
-        graphtype.__init__(self,data)
+        super().__init__(data)
         self._source=source
         self._target=target
-        print()
+        #print()
     def dijkstra(self):
+        #print(self.graph.edges)
+        #print(self.graph.nodes)
+        #self._nodes=nx.dijkstra_path(self.graph, "[-75.6909483, 6.338773]", "[-75.5572602, 6.2612576]", weight=None)
         self._nodes=nx.dijkstra_path(self.graph, self._source, self._target, weight='weight')
-        #return path2df(self._nodes)
+
+        print("here")
+
     def dijkstraNoW(self):
         self._nodes=nx.dijkstra_path(self.graph, self._source, self._target, weight=None)
-        #return path2df(self._nodes)
+
     def bellmanford(self):
         self._nodes=nx.shortest_path(self.graph, self._source, self._target, weight='weight', method='bellman-ford')
-        #return path2df(self._nodes)
+
     def getData(self):
         """
         path=deque()
@@ -335,6 +356,7 @@ class configMap:
             get_fill_color=[137, 36, 250],
             get_line_color=[0, 0, 0],
         )
+
     def newPath(data,tag="path",color=(0,15,205)):
         newPath = pdk.Layer(
             type="PathLayer",
@@ -347,11 +369,10 @@ class configMap:
             get_width=5,
         )
         return newPath
+
     def genMapMultlayer(self,fileName,layers:list):
-        #print("map"*50)
         view = pdk.ViewState(latitude=6.256405968932449, longitude= -75.59835591123756, pitch=40, zoom=12)
         mapCompleate = pdk.Deck(layers=layers, initial_view_state=view)
-        #mapCompleate.deck_widget.on_click(filter_by_viewport)
         mapCompleate.to_html(fileName)
     
     def getEmptyMap(self):return self.emptyMap
