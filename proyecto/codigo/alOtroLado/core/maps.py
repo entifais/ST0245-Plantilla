@@ -19,3 +19,12 @@ class maps():
 	@app.route("/map20220505170817704913.html")
 	def map20220505170817704913():
 		return render_template("maps/map20220505170817704913.html")
+	@app.route("/map20220506090426472178.html")
+	def map20220506090426472178():
+		return render_template("maps/map20220506090426472178.html")
+	@app.route("/map20220506091807778594.html")
+	def map20220506091807778594():
+		return render_template("maps/map20220506091807778594.html")
+	@app.route("/map20220506093157857947.html")
+	def map20220506093157857947():
+		return render_template("maps/map20220506093157857947.html")

@@ -61,5 +61,5 @@ optimise
 *** DONE data
 *** implementatios dijikstra
 *** DONE optimisations
-*** info web page and test cases
+*** DONE info web page and test cases
 *

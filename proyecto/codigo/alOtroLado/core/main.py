@@ -113,9 +113,17 @@ class webpage():
     @app.route("/eafit_santafe.html")
     def eafit_santafe():
         return render_template("examples/eafit_santafe.html")
+    @app.route("/eafit2medellin.html")
+    def eafit2medellin():
+        return render_template("examples/eafit2medellin.html")
+    @app.route("/antioquia2nacional.html")
+    def antioquia2nacional():
+        return render_template("examples/antioquia2nacional.html")
+    @app.route("/nacional2luisamigo.html")
+    def nacional2luisamigo():
+        return render_template("examples/nacional2luisamigo.html")
 
-
-
+        
     #data
     @app.route("/data.json")
     def webDataJson():
