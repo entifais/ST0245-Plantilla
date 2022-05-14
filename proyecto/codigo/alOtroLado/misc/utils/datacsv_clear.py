@@ -204,20 +204,20 @@ def cretecsv():
            #print("works")
         if np.isnan(data["harassmentRisk"][i]) and  (data["name"][i]=="nan" or type(data["name"][i])==type(0.0)):
             weights=(mean*length)/length
-            newdata+=str(i)+";"+str(data["origin"][i])+";"+str(data["destination"][i])+";"+str(data["length"][i])+";"+str(data["oneway"][i])+";"+str(mean)+";"+str(data["geometry"][i])+";"+str(weights)+";"+str(edges)+";"+str(node)#+"\n"
+            newdata+=str(i)+" ;"+str(data["origin"][i])+";"+str(data["destination"][i])+";"+str(data["length"][i])+";"+str(data["oneway"][i])+";"+str(mean)+";"+str(data["geometry"][i])+";"+str(weights)+";"+str(edges)+";"+str(node)+"\n"
         elif data["name"][i]=="nan" or type(data["name"][i])==type(0.0) :
             #print("name",i)
             #data["name"][i]=str(i)
-            newdata+=str(i)+";"+str(data["origin"][i])+";"+str(data["destination"][i])+";"+str(data["length"][i])+";"+str(data["oneway"][i])+";"+str(data["harassmentRisk"][i])+";"+str(data["geometry"][i])+";"+str(weights)+";"+str(edges)+";"+str(node)#+"\n"
+            newdata+=str(i)+" ;"+str(data["origin"][i])+";"+str(data["destination"][i])+";"+str(data["length"][i])+";"+str(data["oneway"][i])+";"+str(data["harassmentRisk"][i])+";"+str(data["geometry"][i])+";"+str(weights)+";"+str(edges)+";"+str(node)+"\n"
         elif np.isnan(data["harassmentRisk"][i]):# or str(type(testvaluetype))=="<class 'numpy.float64'>":
             #print("harassmentRisk",i)
             #data["harassmentRisk"][i]=mean
             weights=(mean*length)/length
-            newdata+=str(data["name"][i])+";"+str(data["origin"][i])+";"+str(data["destination"][i])+";"+str(data["length"][i])+";"+str(data["oneway"][i])+";"+str(mean)+";"+str(data["geometry"][i])+";"+str(weights)+";"+str(edges)+";"+str(node)#+"\n"
+            newdata+=str(data["name"][i])+";"+str(data["origin"][i])+";"+str(data["destination"][i])+";"+str(data["length"][i])+";"+str(data["oneway"][i])+";"+str(mean)+";"+str(data["geometry"][i])+";"+str(weights)+";"+str(edges)+";"+str(node)+"\n"
         else:
-            newdata+=str(data["name"][i])+";"+str(data["origin"][i])+";"+str(data["destination"][i])+";"+str(data["length"][i])+";"+str(data["oneway"][i])+";"+str(data["harassmentRisk"][i])+";"+str(data["geometry"][i])+";"+str(weights)+";"+str(edges)+";"+str(node)#+"\n"
+            newdata+=str(data["name"][i])+";"+str(data["origin"][i])+";"+str(data["destination"][i])+";"+str(data["length"][i])+";"+str(data["oneway"][i])+";"+str(data["harassmentRisk"][i])+";"+str(data["geometry"][i])+";"+str(weights)+";"+str(edges)+";"+str(node)+"\n"
         #harassmentRisk=data["harassmentRisk"][i]
-        
+        #print(newdata)
         #data["node"][i]=node
         #data["edges"][i]=edges
         #data["weights"][i]=weights

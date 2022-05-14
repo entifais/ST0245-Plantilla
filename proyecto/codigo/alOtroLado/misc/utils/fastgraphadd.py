@@ -1,6 +1,6 @@
 import networkx as nx
-
-def readRealtime(name:str,sep=";":str):
+import pandas as pd
+def readRealtime(name:str,sep=";"):
   """
   readRealtime(name:str,sep=";":str)) , is a genteretor return row of csv at iteration 
   """
@@ -22,4 +22,7 @@ def main():
 		ii+=1
 	print(nx.to_dict_of_dicts(Grafo))
 
-main()
+#main()
+data=list(readRealtime("data_csv.csv",sep=";"))
+#print(data,end="\n")
+df = pd.DataFrame(data, columns = data[0])
